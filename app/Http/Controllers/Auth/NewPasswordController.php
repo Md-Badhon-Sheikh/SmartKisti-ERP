@@ -45,6 +45,6 @@ class NewPasswordController extends Controller
 
         $request->session()->forget(['otp_mobile', 'otp_verified_mobile']);
 
-        return redirect()->route('login')->with('status', 'পাসওয়ার্ড সফলভাবে পরিবর্তন হয়েছে। এখন লগইন করুন।');
+        return redirect()->route('login')->with('status', __('Password changed successfully. Please login now.'));
     }
 }

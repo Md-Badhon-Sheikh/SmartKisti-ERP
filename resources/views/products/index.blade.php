@@ -1,4 +1,4 @@
-<x-app-layout title="পণ্য">
+<x-app-layout :title="__('Products')">
     <div class="card">
         <div class="card-header border-0 pt-6">
             <div class="card-toolbar">
@@ -6,7 +6,7 @@
             </div>
         </div>
         <div class="card-body">
-            <p class="text-muted mb-0">Product Management মডিউল শীঘ্রই যুক্ত হবে।</p>
+            <p class="text-muted mb-0">{{ __('The Product Management module will be added soon.') }}</p>
         </div>
     </div>
 </x-app-layout>

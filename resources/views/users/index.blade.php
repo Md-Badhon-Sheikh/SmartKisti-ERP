@@ -1,4 +1,4 @@
-<x-app-layout title="ইউজার তালিকা">
+<x-app-layout :title="__('All Users')">
     <div class="card">
         <div class="card-header border-0 pt-6">
             <div class="card-toolbar">
@@ -44,7 +44,7 @@
                                     @unless ($user->hasRole('super-admin'))
                                         <form action="{{ route('users.promote-super-admin', $user) }}" method="POST" class="d-inline promote-form">
                                             @csrf
-                                            <button type="submit" class="btn btn-sm btn-icon btn-light-warning me-2" title="Make Super Admin">
+                                            <button type="submit" class="btn btn-sm btn-icon btn-light-warning me-2" title="{{ __('Make Super Admin') }}">
                                                 <i class="fas fa-crown"></i>
                                             </button>
                                         </form>
@@ -77,12 +77,12 @@
                 form.addEventListener('submit', function (e) {
                     e.preventDefault();
                     Swal.fire({
-                        title: 'আপনি কি নিশ্চিত?',
-                        text: 'এই ইউজারকে ডিলিট করা হবে!',
+                        title: '{{ __('Are you sure?') }}',
+                        text: '{{ __('This user will be deleted!') }}',
                         icon: 'warning',
                         showCancelButton: true,
-                        confirmButtonText: 'হ্যাঁ, ডিলিট করুন',
-                        cancelButtonText: 'বাতিল',
+                        confirmButtonText: '{{ __('Yes, delete it') }}',
+                        cancelButtonText: '{{ __('Cancel') }}',
                     }).then(function (result) {
                         if (result.isConfirmed) {
                             form.submit();
@@ -95,12 +95,12 @@
                 form.addEventListener('submit', function (e) {
                     e.preventDefault();
                     Swal.fire({
-                        title: 'আপনি কি নিশ্চিত?',
-                        text: 'এই ইউজারকে Super Admin বানানো হবে!',
+                        title: '{{ __('Are you sure?') }}',
+                        text: '{{ __('This user will be made a Super Admin!') }}',
                         icon: 'warning',
                         showCancelButton: true,
-                        confirmButtonText: 'হ্যাঁ, নিশ্চিত',
-                        cancelButtonText: 'বাতিল',
+                        confirmButtonText: '{{ __('Yes, confirm') }}',
+                        cancelButtonText: '{{ __('Cancel') }}',
                     }).then(function (result) {
                         if (result.isConfirmed) {
                             form.submit();

@@ -57,7 +57,7 @@ class UserManagementController extends Controller
 
         $user->assignRole($validated['role']);
 
-        return redirect()->route('users.index')->with('status', 'ইউজার সফলভাবে তৈরি হয়েছে।');
+        return redirect()->route('users.index')->with('status', __('User created successfully.'));
     }
 
     public function show(User $user): View
@@ -105,28 +105,28 @@ class UserManagementController extends Controller
         $user->save();
         $user->syncRoles([$validated['role']]);
 
-        return redirect()->route('users.index')->with('status', 'ইউজার সফলভাবে আপডেট হয়েছে।');
+        return redirect()->route('users.index')->with('status', __('User updated successfully.'));
     }
 
     public function destroy(Request $request, User $user): RedirectResponse
     {
         if ($user->id === $request->user()->id) {
-            return back()->with('error', 'নিজেকে ডিলিট করা যাবে না।');
+            return back()->with('error', __('You cannot delete yourself.'));
         }
 
         if ($user->hasRole('super-admin') && User::role('super-admin')->count() <= 1) {
-            return back()->with('error', 'শেষ Super Admin ডিলিট করা যাবে না।');
+            return back()->with('error', __('The last Super Admin cannot be deleted.'));
         }
 
         $user->delete();
 
-        return redirect()->route('users.index')->with('status', 'ইউজার ডিলিট হয়েছে।');
+        return redirect()->route('users.index')->with('status', __('User deleted.'));
     }
 
     public function promoteSuperAdmin(User $user): RedirectResponse
     {
         $user->syncRoles(['super-admin']);
 
-        return back()->with('status', $user->name.' কে Super Admin করা হয়েছে।');
+        return back()->with('status', __(':name has been made a Super Admin.', ['name' => $user->name]));
     }
 }

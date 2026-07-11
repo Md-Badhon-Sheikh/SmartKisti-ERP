@@ -1,4 +1,4 @@
-<x-app-layout title="আমার প্রোফাইল">
+<x-app-layout :title="__('My Profile')">
     <div class="row justify-content-center">
         <div class="col-md-6">
             <div class="card p-5">
@@ -13,19 +13,19 @@
                         @endif
                     </div>
                     <h3 class="text-gray-900 fs-2 fw-bolder my-3">{{ auth()->user()->name }}</h3>
-                    <h5 class="text-gray-600 fw-semibold mb-0 fs-6">মোবাইলঃ {{ auth()->user()->mobile }}</h5>
+                    <h5 class="text-gray-600 fw-semibold mb-0 fs-6">{{ __('Mobile') }}: {{ auth()->user()->mobile }}</h5>
                     @if (auth()->user()->email)
-                        <h5 class="text-gray-600 fw-semibold mb-0 fs-6">ইমেইলঃ {{ auth()->user()->email }}</h5>
+                        <h5 class="text-gray-600 fw-semibold mb-0 fs-6">{{ __('Email') }}: {{ auth()->user()->email }}</h5>
                     @endif
                     <h5 class="text-gray-600 fw-semibold mb-0 fs-6">
-                        রোলঃ {{ auth()->user()->getRoleNames()->implode(', ') ?: '—' }}
+                        {{ __('Role') }}: {{ auth()->user()->getRoleNames()->implode(', ') ?: '—' }}
                     </h5>
 
                     <div class="d-flex flex-column flex-md-row align-items-center gap-4 pt-4 w-100">
-                        <a href="{{ route('profile.edit') }}" class="btn btn-primary fs-6 w-100">প্রোফাইল সম্পাদনা করুন</a>
+                        <a href="{{ route('profile.edit') }}" class="btn btn-primary fs-6 w-100">{{ __('Edit Profile') }}</a>
                         <form method="POST" action="{{ route('logout') }}" class="w-100">
                             @csrf
-                            <button type="submit" class="btn btn-danger fs-6 w-100">লগ আউট</button>
+                            <button type="submit" class="btn btn-danger fs-6 w-100">{{ __('Sign Out') }}</button>
                         </form>
                     </div>
                 </div>

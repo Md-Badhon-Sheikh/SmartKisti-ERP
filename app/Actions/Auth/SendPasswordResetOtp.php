@@ -23,7 +23,9 @@ class SendPasswordResetOtp
 
         if (RateLimiter::tooManyAttempts($throttleKey, 3)) {
             throw ValidationException::withMessages([
-                $errorField => 'অনেকবার চেষ্টা করা হয়েছে। '.RateLimiter::availableIn($throttleKey).' সেকেন্ড পর আবার চেষ্টা করুন।',
+                $errorField => __('Too many attempts. Please try again in :seconds seconds.', [
+                    'seconds' => RateLimiter::availableIn($throttleKey),
+                ]),
             ]);
         }
 

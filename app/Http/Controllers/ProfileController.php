@@ -61,6 +61,6 @@ class ProfileController extends Controller
 
         $user->save();
 
-        return redirect()->route('profile.show')->with('status', 'প্রোফাইল সফলভাবে আপডেট হয়েছে।');
+        return redirect()->route('profile.show')->with('status', __('Profile updated successfully.'));
     }
 }

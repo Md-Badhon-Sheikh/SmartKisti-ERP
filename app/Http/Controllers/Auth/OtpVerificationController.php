@@ -44,13 +44,13 @@ class OtpVerificationController extends Controller
 
         if (! $record || $record->expires_at->isPast()) {
             throw ValidationException::withMessages([
-                'otp' => 'কোডের মেয়াদ শেষ হয়ে গেছে। আবার কোড পাঠান।',
+                'otp' => __('The code has expired. Please resend the code.'),
             ]);
         }
 
         if ($record->attempts >= 5) {
             throw ValidationException::withMessages([
-                'otp' => 'অনেকবার ভুল চেষ্টা করা হয়েছে। আবার কোড পাঠান।',
+                'otp' => __('Too many incorrect attempts. Please resend the code.'),
             ]);
         }
 
@@ -58,7 +58,7 @@ class OtpVerificationController extends Controller
             $record->increment('attempts');
 
             throw ValidationException::withMessages([
-                'otp' => 'কোডটি সঠিক নয়।',
+                'otp' => __('The code is incorrect.'),
             ]);
         }
 
@@ -80,6 +80,6 @@ class OtpVerificationController extends Controller
 
         $sendOtp->handle($mobile, errorField: 'otp');
 
-        return back()->with('status', 'নতুন কোড পাঠানো হয়েছে।');
+        return back()->with('status', __('A new code has been sent.'));
     }
 }

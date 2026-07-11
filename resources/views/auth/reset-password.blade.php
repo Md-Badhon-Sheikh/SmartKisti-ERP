@@ -1,11 +1,11 @@
-<x-guest-layout title="নতুন পাসওয়ার্ড">
-    <h2 class="mb-6 text-center text-lg font-semibold text-gray-900 dark:text-white">নতুন পাসওয়ার্ড সেট করুন</h2>
+<x-guest-layout :title="__('New Password')">
+    <h2 class="mb-6 text-center text-lg font-semibold text-gray-900 dark:text-white">{{ __('Set New Password') }}</h2>
 
     <form method="POST" action="{{ route('password.store') }}" class="space-y-4">
         @csrf
 
         <div>
-            <label for="password" class="block text-sm font-medium text-gray-700 dark:text-gray-300">নতুন পাসওয়ার্ড</label>
+            <label for="password" class="block text-sm font-medium text-gray-700 dark:text-gray-300">{{ __('New Password') }}</label>
             <input
                 id="password"
                 name="password"
@@ -21,7 +21,7 @@
         </div>
 
         <div>
-            <label for="password_confirmation" class="block text-sm font-medium text-gray-700 dark:text-gray-300">পাসওয়ার্ড নিশ্চিত করুন</label>
+            <label for="password_confirmation" class="block text-sm font-medium text-gray-700 dark:text-gray-300">{{ __('Confirm Password') }}</label>
             <input
                 id="password_confirmation"
                 name="password_confirmation"
@@ -36,7 +36,7 @@
             type="submit"
             class="w-full rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
         >
-            পাসওয়ার্ড পরিবর্তন করুন
+            {{ __('Change Password') }}
         </button>
     </form>
 </x-guest-layout>

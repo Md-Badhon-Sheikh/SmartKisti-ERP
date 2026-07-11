@@ -1,7 +1,7 @@
-<x-guest-layout title="কোড ভেরিফাই করুন">
-    <h2 class="mb-2 text-center text-lg font-semibold text-gray-900 dark:text-white">ভেরিফিকেশন কোড দিন</h2>
+<x-guest-layout :title="__('Verify Code')">
+    <h2 class="mb-2 text-center text-lg font-semibold text-gray-900 dark:text-white">{{ __('Enter Verification Code') }}</h2>
     <p class="mb-6 text-center text-sm text-gray-500 dark:text-gray-400">
-        <span dir="ltr">{{ $mobile }}</span> নম্বরে পাঠানো ৬ ডিজিটের কোডটি লিখুন।
+        {{ __('Enter the 6-digit code sent to :mobile', ['mobile' => $mobile]) }}
     </p>
 
     @if (session('status'))
@@ -14,7 +14,7 @@
         @csrf
 
         <div>
-            <label for="otp" class="block text-sm font-medium text-gray-700 dark:text-gray-300">ভেরিফিকেশন কোড</label>
+            <label for="otp" class="block text-sm font-medium text-gray-700 dark:text-gray-300">{{ __('Verification Code') }}</label>
             <input
                 id="otp"
                 name="otp"
@@ -23,7 +23,7 @@
                 maxlength="6"
                 autofocus
                 required
-                placeholder="৬ ডিজিটের কোড"
+                placeholder="{{ __('6-digit code') }}"
                 class="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-center text-lg tracking-widest shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
             >
             @error('otp')
@@ -35,14 +35,14 @@
             type="submit"
             class="w-full rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
         >
-            যাচাই করুন
+            {{ __('Verify') }}
         </button>
     </form>
 
     <form method="POST" action="{{ route('password.otp.resend') }}" class="mt-4 text-center">
         @csrf
         <button type="submit" class="text-sm text-indigo-600 hover:underline dark:text-indigo-400">
-            কোড পাননি? আবার পাঠান
+            {{ __("Didn't receive the code? Resend") }}
         </button>
     </form>
 </x-guest-layout>
