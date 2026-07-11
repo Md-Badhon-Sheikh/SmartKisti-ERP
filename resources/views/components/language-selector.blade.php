@@ -2,12 +2,11 @@
     $currentLocale = app()->getLocale();
 @endphp
 <div class="language-selector">
-    <input type="checkbox" id="language-dropdown-toggle" class="language-dropdown-toggle">
-    <label for="language-dropdown-toggle" class="language-dropdown-label">
+    <div class="language-dropdown-label">
         <span class="fi fi-{{ $currentLocale === 'en' ? 'us' : 'bd' }}"></span>&nbsp;
         <span class="selected-language">{{ $currentLocale === 'en' ? 'EN' : 'BN' }}</span>
         <span class="dropdown-arrow"></span>
-    </label>
+    </div>
     <ul class="language-dropdown-menu" style="display: none">
         <li class="{{ $currentLocale === 'bn' ? 'active' : '' }}">
             <a href="#" data-locale="bn"><span class="fi fi-bd"></span> বাংলা</a>
@@ -17,9 +16,9 @@
         </li>
     </ul>
 
-    <form id="locale-form" method="POST" action="{{ route('change.locale') }}">
+    <form class="locale-form" method="POST" action="{{ route('change.locale') }}">
         @csrf
-        <input type="hidden" name="locale" id="locale-input" value="">
+        <input type="hidden" name="locale" class="locale-input" value="">
     </form>
 </div>
 
@@ -30,16 +29,13 @@
         background-color: #DBDFE9;
         border-radius: 4px;
     }
-    .language-dropdown-toggle {
-        display: none;
-    }
-    .language-dropdown-toggle:checked + .language-dropdown-label .dropdown-arrow {
-        transform: rotate(180deg);
-    }
     .language-dropdown-label {
         cursor: pointer;
         display: flex;
         align-items: center;
+    }
+    .language-dropdown-label.open .dropdown-arrow {
+        transform: rotate(180deg);
     }
     .selected-language {
         margin-right: 5px;
@@ -84,25 +80,30 @@
     @push('scripts')
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            document.querySelectorAll('.language-dropdown-label').forEach(function (label) {
+            document.querySelectorAll('.language-selector .language-dropdown-label').forEach(function (label) {
                 label.addEventListener('click', function (e) {
                     e.stopPropagation();
                     var menu = label.parentElement.querySelector('.language-dropdown-menu');
-                    menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
+                    var isOpen = menu.style.display !== 'none';
+                    menu.style.display = isOpen ? 'none' : 'block';
+                    label.classList.toggle('open', ! isOpen);
                 });
             });
 
             document.addEventListener('click', function () {
-                document.querySelectorAll('.language-dropdown-menu').forEach(function (menu) {
+                document.querySelectorAll('.language-selector .language-dropdown-menu').forEach(function (menu) {
                     menu.style.display = 'none';
+                });
+                document.querySelectorAll('.language-selector .language-dropdown-label').forEach(function (label) {
+                    label.classList.remove('open');
                 });
             });
 
             document.querySelectorAll('.language-selector [data-locale]').forEach(function (link) {
                 link.addEventListener('click', function (e) {
                     e.preventDefault();
-                    var form = link.closest('.language-selector').querySelector('#locale-form');
-                    form.querySelector('#locale-input').value = link.dataset.locale;
+                    var form = link.closest('.language-selector').querySelector('.locale-form');
+                    form.querySelector('.locale-input').value = link.dataset.locale;
                     form.submit();
                 });
             });

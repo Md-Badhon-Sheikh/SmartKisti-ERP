@@ -112,7 +112,7 @@
 
                     <div class="d-flex align-items-stretch flex-lg-grow-1">
                         <div class="d-flex align-items-stretch flex-shrink-0 ms-auto">
-                            <div class="d-flex align-items-center ms-1 ms-lg-3">
+                            <div class="d-none d-lg-flex align-items-center ms-1 ms-lg-3">
                                 <x-language-selector />
                             </div>
                             <div class="d-flex align-items-center ms-1 ms-lg-3" id="kt_header_user_menu_toggle">
@@ -156,6 +156,8 @@
                     </div>
                 </div>
             </div>
+
+            <x-mobile-nav />
 
             <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
                 <div class="post d-flex flex-column-fluid" id="kt_post">
