@@ -1,0 +1,80 @@
+.erp-datatable thead tr {
+  background-color: rgba(222, 226, 230, 0.2) !important;
+}
+.erp-datatable thead tr th {
+  border-left-width: 1px !important;
+  padding: 12px !important;
+}
+.erp-datatable tr td {
+  padding: 12px !important;
+  border-left-width: 1px !important;
+  border-bottom-width: 1px !important;
+}
+.erp-datatable tbody tr:last-child td,
+.erp-datatable tbody tr:last-child th,
+.erp-datatable tfoot tr:last-child td,
+.erp-datatable tfoot tr:last-child th {
+  border-bottom: 1px solid rgba(222, 226, 230, 0.2) !important;
+  border-bottom-width: 1px !important;
+}
+
+.dataTables_paginate {
+  display: flex;
+  align-items: center;
+  justify-content: end;
+}
+
+@media screen and (max-width: 768px) {
+  .dataTables_paginate {
+    justify-content: center !important;
+  }
+}
+.dataTables_paginate > span {
+  display: flex;
+  align-items: center;
+}
+
+.pagination a.page-link,
+.paginate_button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 0.475rem;
+  height: 2.5rem;
+  padding: 0 4px;
+  min-width: 2.5rem;
+  font-weight: 500;
+  font-size: 14px;
+  margin-right: 6px;
+  cursor: pointer;
+}
+
+.pagination .page-link.disabled,
+.paginate_button.disabled {
+  color: #c4cada;
+  background-color: rgba(0, 0, 0, 0);
+  border-color: rgba(0, 0, 0, 0);
+  pointer-events: none;
+}
+
+.paginate_button:last-child {
+  margin-right: 0px;
+}
+
+.pagination .page-link:hover,
+.paginate_button:hover {
+  z-index: 2;
+  color: #1b84ff;
+  background-color: #f9f9f9;
+  border-color: rgba(0, 0, 0, 0);
+}
+
+.paginate_button.current {
+  background-color: #1b84ff;
+  color: #fff;
+  border-color: rgba(0, 0, 0, 0);
+}
+
+.dataTables_filter input {
+  border: 1px solid #e4e6ef;
+}

@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth', 'role:super-admin|admin'])->prefix('users')->name('users.')->group(function () {
     Route::get('/', [UserManagementController::class, 'index'])->name('index');
+    Route::get('data', [UserManagementController::class, 'Datatable'])->name('data');
     Route::get('create', [UserManagementController::class, 'create'])->name('create');
     Route::post('/', [UserManagementController::class, 'store'])->name('store');
     Route::get('{user}', [UserManagementController::class, 'show'])->name('show');

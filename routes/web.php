@@ -12,7 +12,6 @@ Route::post('change-locale', [LocaleController::class, 'update'])->name('change.
 
 Route::middleware('auth')->group(function () {
     Route::view('dashboard', 'dashboard')->name('dashboard');
-    Route::view('products', 'products.index')->name('products.index');
     Route::view('customers', 'customers.index')->name('customers.index');
 
     Route::get('profile', [ProfileController::class, 'show'])->name('profile.show');
@@ -22,3 +21,4 @@ Route::middleware('auth')->group(function () {
 
 require __DIR__.'/auth.php';
 require __DIR__.'/users.php';
+require __DIR__.'/products.php';

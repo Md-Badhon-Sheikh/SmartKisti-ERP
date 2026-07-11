@@ -12,8 +12,11 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
 
+    <link href="{{ asset('admin/assets/plugins/custom/datatables/datatables.bundle.css') }}" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.2/css/buttons.dataTables.min.css">
     <link href="{{ asset('admin/assets/css/plugins.bundle.css') }}" rel="stylesheet" type="text/css">
     <link href="{{ asset('admin/assets/css/style.bundle.css') }}" rel="stylesheet" type="text/css">
+    <link href="{{ asset('admin/assets/css/datatable-custom.css') }}" rel="stylesheet" type="text/css">
 </head>
 <body id="kt_body" class="header-fixed header-tablet-and-mobile-fixed toolbar-enabled aside-enabled aside-fixed">
 <div class="d-flex flex-column flex-root">
@@ -52,11 +55,53 @@
                             </a>
                         </div>
 
-                        <div class="menu-item">
-                            <a class="menu-link {{ request()->routeIs('products.index') ? 'active' : '' }}" href="{{ route('products.index') }}">
+                        <div data-kt-menu-trigger="click"
+                             class="menu-item menu-accordion {{ request()->routeIs('products.*', 'categories.*', 'sub-categories.*', 'brands.*', 'manufacturers.*') ? 'hover show active' : '' }}">
+                            <span class="menu-link">
                                 <span class="menu-icon"><i class="fas fa-couch"></i></span>
-                                <span class="menu-title">{{ __('Products') }}</span>
-                            </a>
+                                <span class="menu-title">{{ __('Product Management') }}</span>
+                                <span class="menu-arrow"></span>
+                            </span>
+                            <div class="menu-sub menu-sub-accordion menu-active-bg">
+                                <div class="menu-item" style="margin-left: 20px;">
+                                    <a class="menu-link {{ request()->routeIs('products.index') ? 'active' : '' }}" href="{{ route('products.index') }}">
+                                        <span class="menu-bullet"><span class="bullet bullet-dot"></span></span>
+                                        <span class="menu-title">{{ __('All Products') }}</span>
+                                    </a>
+                                </div>
+                                @hasanyrole('super-admin|admin|manager')
+                                <div class="menu-item" style="margin-left: 20px;">
+                                    <a class="menu-link {{ request()->routeIs('products.create') ? 'active' : '' }}" href="{{ route('products.create') }}">
+                                        <span class="menu-bullet"><span class="bullet bullet-dot"></span></span>
+                                        <span class="menu-title">{{ __('New Product') }}</span>
+                                    </a>
+                                </div>
+                                <div class="menu-item" style="margin-left: 20px;">
+                                    <a class="menu-link {{ request()->routeIs('categories.*') ? 'active' : '' }}" href="{{ route('categories.index') }}">
+                                        <span class="menu-bullet"><span class="bullet bullet-dot"></span></span>
+                                        <span class="menu-title">{{ __('Categories') }}</span>
+                                    </a>
+                                </div>
+                                <div class="menu-item" style="margin-left: 20px;">
+                                    <a class="menu-link {{ request()->routeIs('sub-categories.*') ? 'active' : '' }}" href="{{ route('sub-categories.index') }}">
+                                        <span class="menu-bullet"><span class="bullet bullet-dot"></span></span>
+                                        <span class="menu-title">{{ __('Sub Categories') }}</span>
+                                    </a>
+                                </div>
+                                <div class="menu-item" style="margin-left: 20px;">
+                                    <a class="menu-link {{ request()->routeIs('brands.*') ? 'active' : '' }}" href="{{ route('brands.index') }}">
+                                        <span class="menu-bullet"><span class="bullet bullet-dot"></span></span>
+                                        <span class="menu-title">{{ __('Brands') }}</span>
+                                    </a>
+                                </div>
+                                <div class="menu-item" style="margin-left: 20px;">
+                                    <a class="menu-link {{ request()->routeIs('manufacturers.*') ? 'active' : '' }}" href="{{ route('manufacturers.index') }}">
+                                        <span class="menu-bullet"><span class="bullet bullet-dot"></span></span>
+                                        <span class="menu-title">{{ __('Manufacturers') }}</span>
+                                    </a>
+                                </div>
+                                @endhasanyrole
+                            </div>
                         </div>
 
                         <div class="menu-item">
@@ -189,8 +234,38 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="{{ asset('admin/assets/js/plugins.bundle.js') }}"></script>
 <script src="{{ asset('admin/assets/js/scripts.bundle.js') }}"></script>
+<script src="{{ asset('admin/assets/plugins/custom/datatables/datatables.bundle.js') }}"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.colVis.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    function smartkistiDataTable(selector, options) {
+        return $(selector).DataTable($.extend(true, {
+            processing: true,
+            serverSide: true,
+            lengthMenu: [[10, 30, 50, -1], [10, 30, 50, 'All']],
+            pageLength: 10,
+            dom: "<'row'<'col-sm-4'l><'col-sm-4 d-flex justify-content-center'B><'col-sm-4'f>>"
+                + "<'row'<'col-sm-12'tr>>"
+                + "<'row'<'col-sm-5'i><'col-sm-7'p>>",
+            buttons: [{ extend: 'colvis', columns: ':not(:first-child)' }],
+            language: {
+                search: '<div class="input-group">'
+                    + '<span class="input-group-text"><i class="fas fa-search"></i></span>'
+                    + '_INPUT_'
+                    + '</div>',
+            },
+            columnDefs: [{ targets: '_all', searchable: true, orderable: true }],
+            responsive: {
+                details: {
+                    display: $.fn.dataTable.Responsive.display.childRowImmediate,
+                    type: '',
+                },
+            },
+        }, options));
+    }
+</script>
 @stack('scripts')
 </body>
 </html>

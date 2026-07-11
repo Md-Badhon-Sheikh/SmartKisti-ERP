@@ -4,11 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Database\Seeders\RolePermissionSeeder;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 use Spatie\Permission\Models\Role;
+use Yajra\DataTables\Facades\DataTables;
 
 class UserManagementController extends Controller
 {
@@ -24,9 +26,37 @@ class UserManagementController extends Controller
 
     public function index(): View
     {
-        $users = User::with('roles')->latest()->paginate(15);
+        return view('users.index');
+    }
 
-        return view('users.index', ['users' => $users]);
+    public function Datatable(Request $request): JsonResponse
+    {
+        $users = User::with('roles')->select('users.*');
+
+        return DataTables::eloquent($users)
+            ->addColumn('role', fn (User $user) => $user->roles->pluck('name')->implode(', '))
+            ->addColumn('action', function (User $user) use ($request) {
+                $html = '<a href="'.route('users.show', $user).'" class="btn btn-sm btn-icon btn-light-success me-2" title="'.__('View').'"><i class="fas fa-eye"></i></a>';
+                $html .= '<a href="'.route('users.edit', $user).'" class="btn btn-sm btn-icon btn-light-primary me-2" title="'.__('Edit').'"><i class="fas fa-pen"></i></a>';
+
+                if ($request->user()->hasRole('super-admin') && ! $user->hasRole('super-admin')) {
+                    $html .= '<form action="'.route('users.promote-super-admin', $user).'" method="POST" class="d-inline promote-form">'
+                        .csrf_field()
+                        .'<button type="submit" class="btn btn-sm btn-icon btn-light-warning me-2" title="'.__('Make Super Admin').'"><i class="fas fa-crown"></i></button>'
+                        .'</form>';
+                }
+
+                if ($user->id !== $request->user()->id) {
+                    $html .= '<form action="'.route('users.destroy', $user).'" method="POST" class="d-inline delete-form">'
+                        .csrf_field().method_field('DELETE')
+                        .'<button type="submit" class="btn btn-sm btn-icon btn-light-danger" title="'.__('Delete').'"><i class="fas fa-trash"></i></button>'
+                        .'</form>';
+                }
+
+                return $html;
+            })
+            ->rawColumns(['action'])
+            ->toJson();
     }
 
     public function create(): View
