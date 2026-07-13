@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use App\Models\Brand;
 use App\Models\Category;
-use App\Models\Manufacturer;
 use App\Models\SubCategory;
 use Illuminate\Database\Seeder;
 
@@ -34,9 +33,5 @@ class ProductCatalogSeeder extends Seeder
 
         collect(['Samsung', 'LG', 'Walton', 'Singer', 'Sony', 'Vision'])
             ->each(fn (string $name) => Brand::firstOrCreate(['name' => $name]));
-
-        Manufacturer::firstOrCreate(['name' => 'Own Factory'], ['type' => 'own_factory']);
-        Manufacturer::firstOrCreate(['name' => 'Local Carpenter'], ['type' => 'local_carpenter']);
-        Manufacturer::firstOrCreate(['name' => 'Outside Factory'], ['type' => 'outside_factory']);
     }
 }

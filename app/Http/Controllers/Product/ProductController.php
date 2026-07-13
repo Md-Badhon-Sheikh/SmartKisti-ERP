@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Product;
 
+use App\Enums\GlobalConstant;
 use App\Http\Controllers\Controller;
 use App\Models\Brand;
 use App\Models\Category;
-use App\Models\Manufacturer;
 use App\Models\Product;
 use App\Models\SubCategory;
 use Illuminate\Http\JsonResponse;
@@ -25,12 +25,12 @@ class ProductController extends Controller
 
     public function Datatable(Request $request): JsonResponse
     {
-        $products = Product::with(['category', 'subCategory', 'brand', 'manufacturer'])->select('products.*');
+        $products = Product::with(['category', 'subCategory', 'brand'])->select('products.*');
 
         return DataTables::eloquent($products)
             ->addColumn('category', fn (Product $product) => $product->category->name)
             ->addColumn('sub_category', fn (Product $product) => $product->subCategory->name)
-            ->addColumn('brand_manufacturer', fn (Product $product) => $product->brand?->name ?? $product->manufacturer?->name ?? '—')
+            ->addColumn('brand_manufacturer', fn (Product $product) => $product->brand?->name ?? $product->manufacturerName() ?? '—')
             ->addColumn('type', fn (Product $product) => '<span class="badge badge-light-'.($product->product_type === 'ready' ? 'success' : 'warning').'">'
                 .($product->product_type === 'ready' ? __('Ready') : __('Custom')).'</span>')
             ->editColumn('selling_price', fn (Product $product) => number_format($product->selling_price, 2))
@@ -71,7 +71,7 @@ class ProductController extends Controller
 
     public function show(Product $product): View
     {
-        $product->load(['category', 'subCategory', 'brand', 'manufacturer']);
+        $product->load(['category', 'subCategory', 'brand']);
 
         return view('products.show', ['product' => $product]);
     }
@@ -107,7 +107,7 @@ class ProductController extends Controller
             'categories' => Category::where('status', true)->orderBy('name')->get(),
             'subCategories' => SubCategory::where('status', true)->orderBy('name')->get(),
             'brands' => Brand::where('status', true)->orderBy('name')->get(),
-            'manufacturers' => Manufacturer::where('status', true)->orderBy('name')->get(),
+            'manufacturers' => GlobalConstant::activeManufacturers(),
         ];
     }
 
@@ -119,7 +119,7 @@ class ProductController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'product_type' => ['required', Rule::in(['ready', 'custom'])],
             'brand_id' => ['nullable', 'exists:brands,id'],
-            'manufacturer_id' => ['nullable', 'exists:manufacturers,id'],
+            'manufacturer_code' => ['nullable', Rule::in(collect(GlobalConstant::MANUFACTURERS)->pluck('code')->all())],
             'model' => ['nullable', 'string', 'max:255'],
             'imei_serial' => ['nullable', 'string', 'max:255'],
             'wood_type' => ['nullable', 'string', 'max:255'],

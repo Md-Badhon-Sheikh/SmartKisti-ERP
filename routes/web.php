@@ -7,7 +7,6 @@ use App\Http\Controllers\Auth\OtpVerificationController;
 use App\Http\Controllers\LocaleController;
 use App\Http\Controllers\Product\BrandController;
 use App\Http\Controllers\Product\CategoryController;
-use App\Http\Controllers\Product\ManufacturerController;
 use App\Http\Controllers\Product\ProductController;
 use App\Http\Controllers\Product\SubCategoryController;
 use App\Http\Controllers\ProfileController;
@@ -91,9 +90,6 @@ Route::middleware('auth')->group(function () {
 
         Route::get('brands/data', [BrandController::class, 'Datatable'])->name('brands.data');
         Route::resource('brands', BrandController::class)->except('show');
-
-        Route::get('manufacturers/data', [ManufacturerController::class, 'Datatable'])->name('manufacturers.data');
-        Route::resource('manufacturers', ManufacturerController::class)->except('show');
     });
 
     Route::get('products/{product}', [ProductController::class, 'show'])->name('products.show');

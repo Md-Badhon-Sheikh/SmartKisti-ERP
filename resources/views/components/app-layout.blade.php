@@ -73,7 +73,7 @@
                         </div>
 
                         <div data-kt-menu-trigger="click"
-                             class="menu-item menu-accordion {{ request()->routeIs('products.*', 'categories.*', 'sub-categories.*', 'brands.*', 'manufacturers.*') ? 'hover show active' : '' }}">
+                             class="menu-item menu-accordion {{ request()->routeIs('products.*', 'categories.*', 'sub-categories.*', 'brands.*') ? 'hover show active' : '' }}">
                             <span class="menu-link">
                                 <span class="menu-icon">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
@@ -148,18 +148,6 @@
                                             </svg>
                                         </span>
                                         <span class="menu-title">{{ __('Brands') }}</span>
-                                    </a>
-                                </div>
-                                <div class="menu-item" style="margin-left: 20px;">
-                                    <a class="menu-link {{ request()->routeIs('manufacturers.*') ? 'active' : '' }}" href="{{ route('manufacturers.index') }}">
-                                        <span class="menu-bullet">
-                                           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                                            <path d="M3 21V8l6 4V8l6 4V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v17"/>
-                                            <path d="M2 21h20"/>
-                                            <path d="M7 17h.01M12 17h.01M17 17h.01"/>
-                                            </svg>
-                                        </span>
-                                        <span class="menu-title">{{ __('Manufacturers') }}</span>
                                     </a>
                                 </div>
                                 @endhasanyrole

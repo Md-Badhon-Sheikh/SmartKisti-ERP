@@ -107,13 +107,13 @@
 <div class="row mb-6 furniture-section">
     <label class="col-lg-4 col-form-label required fw-bold fs-6">{{ __('Manufacturer') }}</label>
     <div class="col-lg-8 fv-row">
-        <select name="manufacturer_id" class="form-select form-select-solid form-select-lg">
-            <option value="" disabled @selected(! old('manufacturer_id', $product?->manufacturer_id))>{{ __('Select') }}</option>
+        <select name="manufacturer_code" class="form-select form-select-solid form-select-lg">
+            <option value="" disabled @selected(! old('manufacturer_code', $product?->manufacturer_code))>{{ __('Select') }}</option>
             @foreach ($manufacturers as $manufacturer)
-                <option value="{{ $manufacturer->id }}" @selected(old('manufacturer_id', $product?->manufacturer_id) == $manufacturer->id)>{{ $manufacturer->name }}</option>
+                <option value="{{ $manufacturer['code'] }}" @selected(old('manufacturer_code', $product?->manufacturer_code) == $manufacturer['code'])>{{ app()->getLocale() === 'bn' ? $manufacturer['bn_name'] : $manufacturer['en_name'] }}</option>
             @endforeach
         </select>
-        @error('manufacturer_id')
+        @error('manufacturer_code')
             <div class="text-danger fs-7 mt-1">{{ $message }}</div>
         @enderror
     </div>
@@ -223,7 +223,7 @@
         var brandSections = document.querySelectorAll('.brand-section');
         var furnitureSections = document.querySelectorAll('.furniture-section');
         var brandField = document.querySelector('[name="brand_id"]');
-        var manufacturerField = document.querySelector('[name="manufacturer_id"]');
+        var manufacturerField = document.querySelector('[name="manufacturer_code"]');
         var stockSection = document.querySelector('.stock-section');
 
         function updateCategoryDependentFields() {

@@ -47,10 +47,10 @@
                 </div>
             @endif
 
-            @if ($product->manufacturer)
+            @if ($product->manufacturerName())
                 <div class="row mb-4">
                     <label class="col-lg-4 fw-bold text-muted">{{ __('Manufacturer') }}</label>
-                    <div class="col-lg-8">{{ $product->manufacturer->name }}</div>
+                    <div class="col-lg-8">{{ $product->manufacturerName() }}</div>
                 </div>
             @endif
             @if ($product->wood_type)

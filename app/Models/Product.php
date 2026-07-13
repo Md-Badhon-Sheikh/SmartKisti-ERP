@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\GlobalConstant;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -11,7 +12,7 @@ class Product extends Model
         'category_id',
         'sub_category_id',
         'brand_id',
-        'manufacturer_id',
+        'manufacturer_code',
         'name',
         'product_type',
         'model',
@@ -53,8 +54,8 @@ class Product extends Model
         return $this->belongsTo(Brand::class);
     }
 
-    public function manufacturer(): BelongsTo
+    public function manufacturerName(): ?string
     {
-        return $this->belongsTo(Manufacturer::class);
+        return GlobalConstant::manufacturerName($this->manufacturer_code);
     }
 }

@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('category_id')->constrained()->restrictOnDelete();
             $table->foreignId('sub_category_id')->constrained()->restrictOnDelete();
             $table->foreignId('brand_id')->nullable()->constrained()->nullOnDelete();
-            $table->foreignId('manufacturer_id')->nullable()->constrained()->nullOnDelete();
+            $table->string('manufacturer_code')->nullable();
             $table->string('name');
             $table->enum('product_type', ['ready', 'custom'])->default('ready');
 
