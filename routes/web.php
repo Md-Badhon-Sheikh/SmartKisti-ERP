@@ -85,11 +85,27 @@ Route::middleware('auth')->group(function () {
             Route::post('{id}/toggle', [CategoryController::class, 'ToggleStatus'])->name('toggle');
         });
 
-        Route::get('sub-categories/data', [SubCategoryController::class, 'Datatable'])->name('sub-categories.data');
-        Route::resource('sub-categories', SubCategoryController::class)->except('show');
+        // Sub Categories — AJAX modal pattern (list/add/edit/view/delete/toggle all via JSON)
+        Route::prefix('sub-categories')->name('sub-categories.')->group(function () {
+            Route::get('/', [SubCategoryController::class, 'Index'])->name('index');
+            Route::get('datatable', [SubCategoryController::class, 'Datatable'])->name('datatable');
+            Route::post('/', [SubCategoryController::class, 'Store'])->name('store');
+            Route::get('{id}', [SubCategoryController::class, 'Show'])->name('show');
+            Route::post('{id}/update', [SubCategoryController::class, 'Update'])->name('update');
+            Route::post('{id}/delete', [SubCategoryController::class, 'Delete'])->name('delete');
+            Route::post('{id}/toggle', [SubCategoryController::class, 'ToggleStatus'])->name('toggle');
+        });
 
-        Route::get('brands/data', [BrandController::class, 'Datatable'])->name('brands.data');
-        Route::resource('brands', BrandController::class)->except('show');
+        // Brands — AJAX modal pattern (list/add/edit/view/delete/toggle all via JSON)
+        Route::prefix('brands')->name('brands.')->group(function () {
+            Route::get('/', [BrandController::class, 'Index'])->name('index');
+            Route::get('datatable', [BrandController::class, 'Datatable'])->name('datatable');
+            Route::post('/', [BrandController::class, 'Store'])->name('store');
+            Route::get('{id}', [BrandController::class, 'Show'])->name('show');
+            Route::post('{id}/update', [BrandController::class, 'Update'])->name('update');
+            Route::post('{id}/delete', [BrandController::class, 'Delete'])->name('delete');
+            Route::post('{id}/toggle', [BrandController::class, 'ToggleStatus'])->name('toggle');
+        });
     });
 
     Route::get('products/{product}', [ProductController::class, 'show'])->name('products.show');

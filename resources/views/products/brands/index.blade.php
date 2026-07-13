@@ -1,19 +1,31 @@
 <x-app-layout :title="__('Brands')">
-    <div class="card">
-        <div class="card-header border-0 pt-6">
-            <div class="card-toolbar">
-                <h2 class="card-label">{{ __('Brands') }}</h2>
+
+    <div class="container-fluid py-4">
+
+        <div class="row g-4">
+
+            <div class="col-12">
+                <div class="card shadow-sm border">
+                    <div class="card-header d-flex align-items-center justify-content-between">
+                        <h3 class="card-title fw-bold mb-0">{{ __('Brand List') }}</h3>
+                        <button type="button" class="btn btn-primary btn-sm" id="openAddBrandModal">
+                            <i class="fas fa-plus me-1"></i> {{ __('Add Brand') }}
+                        </button>
+                    </div>
+                    <div class="card-body">
+                        @include('products.brands.partials.brand-list-datatable')
+                    </div>
+                </div>
             </div>
-            <div class="card-toolbar">
-                <a href="{{ route('brands.create') }}" class="btn btn-primary">
-                    <i class="fas fa-plus me-1"></i> {{ __('New Brand') }}
-                </a>
-            </div>
+
         </div>
-        <div class="card-body pt-0" style="overflow-x: auto;">
-            @include('partials.brand-list-datatable')
-        </div>
+
     </div>
 
-    <x-delete-confirm-script />
+    {{-- Add / Edit Modal --}}
+    @include('products.brands.partials.add-brand')
+
+    {{-- View Modal --}}
+    @include('products.brands.partials.view-brand')
+
 </x-app-layout>
