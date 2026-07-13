@@ -30,9 +30,11 @@
 
                     <div class="mb-5" id="sub_category_status_row" style="display: none;">
                         <label class="form-label fw-bold d-block">{{ __('Status') }}</label>
-                        <div class="form-check form-switch form-check-custom form-check-solid">
-                            <input class="form-check-input" type="checkbox" name="sub_category_status" id="sub_category_status" value="1" checked>
-                        </div>
+                        <select name="sub_category_status" id="sub_category_status" class="form-select">
+                            <option value="1">{{ __('Active') }}</option>
+                            <option value="0">{{ __('Inactive') }}</option>
+                        </select>
+                        <div class="invalid-feedback" id="sub_category_status_error"></div>
                     </div>
                 </div>
 
@@ -58,11 +60,16 @@ $(function () {
         width: '100%',
     });
 
+    $('#sub_category_status').select2({
+        dropdownParent: $modal,
+        width: '100%',
+    });
+
     function resetForm() {
         $form[0].reset();
         $idInput.val('');
         $('#category_id').val('').trigger('change');
-        $('#sub_category_status').prop('checked', true);
+        $('#sub_category_status').val('1').trigger('change');
         $('#sub_category_status_row').hide();
         $form.find('.is-invalid').removeClass('is-invalid');
         $form.find('.invalid-feedback').text('');
@@ -80,7 +87,7 @@ $(function () {
         $idInput.val(data.id);
         $('#category_id').val(data.category_id).trigger('change');
         $('#sub_category_name').val(data.name);
-        $('#sub_category_status').prop('checked', !!data.status);
+        $('#sub_category_status').val(data.status ? '1' : '0').trigger('change');
         $('#sub_category_status_row').show();
         $modal.modal('show');
     };

@@ -19,9 +19,11 @@
 
                     <div class="mb-5" id="brand_status_row" style="display: none;">
                         <label class="form-label fw-bold d-block">{{ __('Status') }}</label>
-                        <div class="form-check form-switch form-check-custom form-check-solid">
-                            <input class="form-check-input" type="checkbox" name="brand_status" id="brand_status" value="1" checked>
-                        </div>
+                        <select name="brand_status" id="brand_status" class="form-select">
+                            <option value="1">{{ __('Active') }}</option>
+                            <option value="0">{{ __('Inactive') }}</option>
+                        </select>
+                        <div class="invalid-feedback" id="brand_status_error"></div>
                     </div>
                 </div>
 
@@ -42,10 +44,15 @@ $(function () {
     const $title   = $('#brandFormModalTitle');
     const $idInput = $('#brand_id');
 
+    $('#brand_status').select2({
+        dropdownParent: $modal,
+        width: '100%',
+    });
+
     function resetForm() {
         $form[0].reset();
         $idInput.val('');
-        $('#brand_status').prop('checked', true);
+        $('#brand_status').val('1').trigger('change');
         $('#brand_status_row').hide();
         $form.find('.is-invalid').removeClass('is-invalid');
         $form.find('.invalid-feedback').text('');
@@ -62,7 +69,7 @@ $(function () {
         $title.text('{{ __('Edit Brand') }}');
         $idInput.val(data.id);
         $('#brand_name').val(data.name);
-        $('#brand_status').prop('checked', !!data.status);
+        $('#brand_status').val(data.status ? '1' : '0').trigger('change');
         $('#brand_status_row').show();
         $modal.modal('show');
     };
