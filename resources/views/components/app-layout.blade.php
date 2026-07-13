@@ -41,7 +41,7 @@
                 </div>
             </div>
 
-            <div class="aside-menu flex-column-fluid">
+            <div class="aside-menu flex-column-fluid" style="font-size: 15px;">
                 <div class="hover-scroll-overlay-y my-5 my-lg-5" id="kt_aside_menu_wrapper" data-kt-scroll="true"
                      data-kt-scroll-activate="{default: false, lg: true}" data-kt-scroll-height="auto"
                      data-kt-scroll-dependencies="#kt_aside_logo, #kt_aside_footer" data-kt-scroll-wrappers="#kt_aside_menu"
@@ -51,7 +51,23 @@
 
                         <div class="menu-item">
                             <a class="menu-link {{ request()->routeIs('dashboard') ? 'active' : '' }}" href="{{ route('dashboard') }}">
-                                <span class="menu-icon"><i class="fas fa-gauge"></i></span>
+                                <span class="menu-icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                        <path
+                                        d="M7.5 2.5H3.33333C2.8731 2.5 2.5 2.8731 2.5 3.33333V9.16667C2.5 9.6269 2.8731 10 3.33333 10H7.5C7.96024 10 8.33333 9.6269 8.33333 9.16667V3.33333C8.33333 2.8731 7.96024 2.5 7.5 2.5Z"
+                                        stroke="#99A1AF" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round" />
+                                        <path
+                                        d="M16.6667 2.5H12.5C12.0398 2.5 11.6667 2.8731 11.6667 3.33333V5.83333C11.6667 6.29357 12.0398 6.66667 12.5 6.66667H16.6667C17.1269 6.66667 17.5 6.29357 17.5 5.83333V3.33333C17.5 2.8731 17.1269 2.5 16.6667 2.5Z"
+                                        stroke="#99A1AF" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round" />
+                                        <path
+                                        d="M16.6667 10H12.5C12.0398 10 11.6667 10.3731 11.6667 10.8333V16.6667C11.6667 17.1269 12.0398 17.5 12.5 17.5H16.6667C17.1269 17.5 17.5 17.1269 17.5 16.6667V10.8333C17.5 10.3731 17.1269 10 16.6667 10Z"
+                                        stroke="#99A1AF" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round" />
+                                        <path
+                                        d="M7.5 13.3334H3.33333C2.8731 13.3334 2.5 13.7065 2.5 14.1667V16.6667C2.5 17.1269 2.8731 17.5 3.33333 17.5H7.5C7.96024 17.5 8.33333 17.1269 8.33333 16.6667V14.1667C8.33333 13.7065 7.96024 13.3334 7.5 13.3334Z"
+                                        stroke="#99A1AF" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round" />
+                                    </svg>
+
+                                </i></span>
                                 <span class="menu-title">{{ __('Dashboard') }}</span>
                             </a>
                         </div>
@@ -59,45 +75,90 @@
                         <div data-kt-menu-trigger="click"
                              class="menu-item menu-accordion {{ request()->routeIs('products.*', 'categories.*', 'sub-categories.*', 'brands.*', 'manufacturers.*') ? 'hover show active' : '' }}">
                             <span class="menu-link">
-                                <span class="menu-icon"><i class="fas fa-couch"></i></span>
+                                <span class="menu-icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M21 8.2 12 3 3 8.2v7.6L12 21l9-5.2V8.2z"/>
+                                        <path d="M3.3 8.4 12 13.3l8.7-4.9"/>
+                                        <path d="M12 13.3V21"/>
+                                        <path d="M7.5 5.6l9 5v3.2"/>
+                                    </svg>
+                                </span>
                                 <span class="menu-title">{{ __('Product Management') }}</span>
                                 <span class="menu-arrow"></span>
                             </span>
                             <div class="menu-sub menu-sub-accordion menu-active-bg">
                                 <div class="menu-item" style="margin-left: 20px;">
                                     <a class="menu-link {{ request()->routeIs('products.index') ? 'active' : '' }}" href="{{ route('products.index') }}">
-                                        <span class="menu-bullet"><span class="bullet bullet-dot"></span></span>
+                                        <span class="menu-bullet">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+  <rect x="3" y="12" width="8" height="8" rx="1"/>
+  <rect x="13" y="12" width="8" height="8" rx="1"/>
+  <rect x="8" y="4" width="8" height="8" rx="1" fill="none"/>
+  <path d="M12 4v3M7 12v3M17 12v3"/>
+</svg>
+                                        </span>
                                         <span class="menu-title">{{ __('All Products') }}</span>
                                     </a>
                                 </div>
                                 @hasanyrole('super-admin|admin|manager')
                                 <div class="menu-item" style="margin-left: 20px;">
                                     <a class="menu-link {{ request()->routeIs('products.create') ? 'active' : '' }}" href="{{ route('products.create') }}">
-                                        <span class="menu-bullet"><span class="bullet bullet-dot"></span></span>
+                                        <span class="menu-bullet">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M20 13.5v4.3a2 2 0 0 1-1.06 1.77l-6 3.2a2 2 0 0 1-1.88 0l-6-3.2A2 2 0 0 1 4 17.8v-7.1a2 2 0 0 1 1.06-1.77l6-3.2a2 2 0 0 1 1.88 0l1.56.83"/>
+                                            <path d="M4.3 9.8 12 14l4-2.18"/>
+                                            <path d="M12 14v8"/>
+                                            <path d="M18.5 2.5v6"/>
+                                            <path d="M15.5 5.5h6"/>
+                                            </svg>
+                                        </span>
                                         <span class="menu-title">{{ __('New Product') }}</span>
                                     </a>
                                 </div>
                                 <div class="menu-item" style="margin-left: 20px;">
                                     <a class="menu-link {{ request()->routeIs('categories.*') ? 'active' : '' }}" href="{{ route('categories.index') }}">
-                                        <span class="menu-bullet"><span class="bullet bullet-dot"></span></span>
+                                        <span class="menu-bullet">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M3 6a2 2 0 0 1 2-2h4.2a2 2 0 0 1 1.6.8l1 1.4a2 2 0 0 0 1.6.8H19a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6z"/>
+                                            </svg>
+                                        </span>
                                         <span class="menu-title">{{ __('Categories') }}</span>
                                     </a>
                                 </div>
                                 <div class="menu-item" style="margin-left: 20px;">
                                     <a class="menu-link {{ request()->routeIs('sub-categories.*') ? 'active' : '' }}" href="{{ route('sub-categories.index') }}">
-                                        <span class="menu-bullet"><span class="bullet bullet-dot"></span></span>
+                                        <span class="menu-bullet">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                            <rect x="3" y="3" width="7" height="7" rx="1.5"/>
+                                            <path d="M6.5 10v3h6.5"/>
+                                            <path d="M6.5 13v6.5H13"/>
+                                            <rect x="15" y="9.5" width="6.5" height="6" rx="1.5"/>
+                                            <rect x="15" y="16" width="6.5" height="6" rx="1.5"/>
+                                            </svg>
+                                        </span>
                                         <span class="menu-title">{{ __('Sub Categories') }}</span>
                                     </a>
                                 </div>
                                 <div class="menu-item" style="margin-left: 20px;">
                                     <a class="menu-link {{ request()->routeIs('brands.*') ? 'active' : '' }}" href="{{ route('brands.index') }}">
-                                        <span class="menu-bullet"><span class="bullet bullet-dot"></span></span>
+                                        <span class="menu-bullet">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M12.9 3.6 20.4 11a2 2 0 0 1 0 2.9l-6.5 6.5a2 2 0 0 1-2.9 0L3.6 12.9A2 2 0 0 1 3 11.5V5a2 2 0 0 1 2-2h6.5a2 2 0 0 1 1.4.6z"/>
+                                            <circle cx="8" cy="8" r="1.4"/>
+                                            </svg>
+                                        </span>
                                         <span class="menu-title">{{ __('Brands') }}</span>
                                     </a>
                                 </div>
                                 <div class="menu-item" style="margin-left: 20px;">
                                     <a class="menu-link {{ request()->routeIs('manufacturers.*') ? 'active' : '' }}" href="{{ route('manufacturers.index') }}">
-                                        <span class="menu-bullet"><span class="bullet bullet-dot"></span></span>
+                                        <span class="menu-bullet">
+                                           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M3 21V8l6 4V8l6 4V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v17"/>
+                                            <path d="M2 21h20"/>
+                                            <path d="M7 17h.01M12 17h.01M17 17h.01"/>
+                                            </svg>
+                                        </span>
                                         <span class="menu-title">{{ __('Manufacturers') }}</span>
                                     </a>
                                 </div>
@@ -107,7 +168,12 @@
 
                         <div class="menu-item">
                             <a class="menu-link {{ request()->routeIs('customers.index') ? 'active' : '' }}" href="{{ route('customers.index') }}">
-                                <span class="menu-icon"><i class="fas fa-users"></i></span>
+                                <span class="menu-icon">
+                                   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="12" cy="8" r="4"/>
+                                    <path d="M4.5 20.5a7.5 7.5 0 0 1 15 0"/>
+                                    </svg>
+                                </span>
                                 <span class="menu-title">{{ __('Customers') }}</span>
                             </a>
                         </div>
@@ -116,20 +182,42 @@
                         <div data-kt-menu-trigger="click"
                              class="menu-item menu-accordion {{ request()->routeIs('users.*') ? 'hover show active' : '' }}">
                             <span class="menu-link">
-                                <span class="menu-icon"><i class="fas fa-user-gear"></i></span>
+                                <span class="menu-icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="9" cy="8" r="3.5"/>
+                                    <path d="M2.5 20a6.5 6.5 0 0 1 13 0"/>
+                                    <circle cx="17.5" cy="9.5" r="2.5"/>
+                                    <path d="M15.5 14.5a5.5 5.5 0 0 1 6 5.5"/>
+                                    </svg>
+                                </span>
                                 <span class="menu-title">{{ __('User Management') }}</span>
                                 <span class="menu-arrow"></span>
                             </span>
                             <div class="menu-sub menu-sub-accordion menu-active-bg">
                                 <div class="menu-item" style="margin-left: 20px;">
                                     <a class="menu-link {{ request()->routeIs('users.index') ? 'active' : '' }}" href="{{ route('users.index') }}">
-                                        <span class="menu-bullet"><span class="bullet bullet-dot"></span></span>
+                                        <span class="menu-bullet">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                            <circle cx="8" cy="8" r="3.5"/>
+                                            <path d="M2 20a6 6 0 0 1 12 0"/>
+                                            <path d="M17 7h5"/>
+                                            <path d="M17 12h5"/>
+                                            <path d="M17 17h5"/>
+                                            </svg>
+                                        </span>
                                         <span class="menu-title">{{ __('All Users') }}</span>
                                     </a>
                                 </div>
                                 <div class="menu-item" style="margin-left: 20px;">
                                     <a class="menu-link {{ request()->routeIs('users.create') ? 'active' : '' }}" href="{{ route('users.create') }}">
-                                        <span class="menu-bullet"><span class="bullet bullet-dot"></span></span>
+                                        <span class="menu-bullet">
+                                           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                            <circle cx="9.5" cy="8" r="4"/>
+                                            <path d="M2.5 20.5a7 7 0 0 1 14 0"/>
+                                            <path d="M19 7v6"/>
+                                            <path d="M16 10h6"/>
+                                            </svg>
+                                        </span>
                                         <span class="menu-title">{{ __('New User') }}</span>
                                     </a>
                                 </div>
