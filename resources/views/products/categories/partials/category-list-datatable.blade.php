@@ -1,13 +1,11 @@
 <!--begin::Table-->
-<table class="table election-datatable align-middle table-bordered fs-6 gy-5 m-auto display responsive" id="workFieldListDatatable">
+<table class="table erp-datatable align-middle table-bordered fs-6 gy-5 m-auto display responsive" id="categoryListDatatable">
     <thead>
         <tr class="text-start text-muted fw-bolder fs-7 text-uppercase gs-0" style="background: #fff;">
             <th class="min-w-20px  fw-bold text-dark">{{ __('#') }}</th>
             <th class="min-w-120px fw-bold text-dark">{{ __('Name') }}</th>
-            <th class="min-w-120px fw-bold text-dark">{{ __('Label') }}</th>
-            <th class="min-w-60px  fw-bold text-dark">{{ __('Type') }}</th>
-            <th class="min-w-60px  fw-bold text-dark">{{ __('Unit') }}</th>
-            <th class="min-w-50px  fw-bold text-dark">{{ __('Required') }}</th>
+            <th class="min-w-60px  fw-bold text-dark">{{ __('Products') }}</th>
+            <th class="min-w-60px  fw-bold text-dark">{{ __('Brand Required') }}</th>
             <th class="min-w-50px  fw-bold text-dark">{{ __('Status') }}</th>
             <th class="text-end min-w-30px fw-bold text-dark">{{ __('Action') }}</th>
         </tr>
@@ -17,16 +15,17 @@
     </tbody>
 </table>
 
+@push('scripts')
 <script>
 $(document).ready(function () {
 
-    const BASE_URL = "{{ url('admincp/developmentproject/work-fields') }}";
+    const BASE_URL = "{{ url('categories') }}";
 
-    var table = $('#workFieldListDatatable').DataTable({
+    var table = $('#categoryListDatatable').DataTable({
         processing: true,
         serverSide: true,
         ajax: {
-            url:  "{{ route('work.fields.datatable') }}",
+            url:  "{{ route('categories.datatable') }}",
             type: 'GET'
         },
         columns: [
@@ -39,13 +38,11 @@ $(document).ready(function () {
                     return meta.row + meta.settings._iDisplayStart + 1;
                 }
             },
-            { data: 'name',           name: 'name' },
-            { data: 'label',          name: 'label' },
-            { data: 'type_badge',     name: 'type',      orderable: false, searchable: false },
-            { data: 'unit_label',     name: 'unit_label',orderable: false, searchable: false },
-            { data: 'required_badge', name: 'required',  orderable: false, searchable: false },
-            { data: 'status',         name: 'is_active', orderable: false, searchable: false },
-            { data: 'action',         name: 'action',    orderable: false, searchable: false, className: 'text-end' }
+            { data: 'name',                 name: 'name' },
+            { data: 'products_count_badge', name: 'products_count', orderable: false, searchable: false },
+            { data: 'brand_required_badge', name: 'brand_required', orderable: false, searchable: false },
+            { data: 'status',               name: 'status',         orderable: false, searchable: false },
+            { data: 'action',               name: 'action',         orderable: false, searchable: false, className: 'text-end' }
         ],
         lengthMenu: [[10, 30, 50, -1], [10, 30, 50, "All"]],
         pageLength: 10,
@@ -84,8 +81,8 @@ $(document).ready(function () {
             dataType: 'json',
 
             beforeSend: function () {
-                $('#workFieldViewModal').modal('show');
-                $('#workFieldViewModalBody').html(
+                $('#categoryViewModal').modal('show');
+                $('#categoryViewModalBody').html(
                     '<div class="d-flex justify-content-center py-5">' +
                     '<div class="spinner-border text-primary"></div>' +
                     '</div>'
@@ -97,11 +94,11 @@ $(document).ready(function () {
                     toastr.error('{{ __('Invalid response from server.') }}');
                     return;
                 }
-                window.renderWorkFieldViewModal(response.data);
+                window.renderCategoryViewModal(response.data);
             },
 
             error: function (xhr) {
-                $('#workFieldViewModalBody').html(
+                $('#categoryViewModalBody').html(
                     '<div class="text-center text-danger py-5">' +
                     '<i class="fas fa-exclamation-circle fs-2 mb-3"></i>' +
                     '<p>{{ __('Failed to load data.') }}</p>' +
@@ -117,7 +114,7 @@ $(document).ready(function () {
 
         const id = $(this).data('id');
 
-        $('#workFieldListDatatable tbody tr').removeClass('table-warning editing-row');
+        $('#categoryListDatatable tbody tr').removeClass('table-warning editing-row');
         $(this).closest('tr').addClass('table-warning editing-row');
 
         $.ajax({
@@ -130,11 +127,11 @@ $(document).ready(function () {
                     toastr.error('{{ __('Invalid response from server.') }}');
                     return;
                 }
-                window.openWorkFieldEditModal(response.data);
+                window.openCategoryEditModal(response.data);
             },
 
             error: function (xhr) {
-                toastr.error(xhr.responseJSON?.message || '{{ __('Failed to fetch field data.') }}');
+                toastr.error(xhr.responseJSON?.message || '{{ __('Failed to fetch category data.') }}');
             }
         });
     });
@@ -151,7 +148,7 @@ $(document).ready(function () {
 
             success: function (res) {
                 toastr.success(res.message || "{{ __('Status updated.') }}");
-                $('#workFieldListDatatable').DataTable().ajax.reload(null, false);
+                $('#categoryListDatatable').DataTable().ajax.reload(null, false);
             },
 
             error: function (xhr) {
@@ -175,8 +172,8 @@ $(document).ready(function () {
                 headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
 
                 success: function (response) {
-                    toastr.success(response.message || '{{ __('Field deleted.') }}');
-                    $('#workFieldListDatatable').DataTable().ajax.reload(null, false);
+                    toastr.success(response.message || '{{ __('Category deleted.') }}');
+                    $('#categoryListDatatable').DataTable().ajax.reload(null, false);
                 },
 
                 error: function (xhr) {
@@ -204,3 +201,4 @@ $(document).ready(function () {
 
 });
 </script>
+@endpush

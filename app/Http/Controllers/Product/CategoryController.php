@@ -5,87 +5,174 @@ namespace App\Http\Controllers\Product;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\View\View;
 use Yajra\DataTables\Facades\DataTables;
 
 class CategoryController extends Controller
 {
-    public function index(): View
+    /**
+     * Display the index page.
+     */
+    public function Index()
     {
         return view('products.categories.index');
     }
 
-    public function Datatable(): JsonResponse
+    /**
+     * Return DataTable JSON for the listing.
+     */
+    public function Datatable(Request $request): JsonResponse
     {
-        $categories = Category::select('categories.*')->withCount('products');
+        $query = Category::select(['id', 'name', 'brand_required', 'status', 'created_at'])
+            ->withCount('products');
 
-        return DataTables::eloquent($categories)
-            ->addColumn('brand_required', fn (Category $category) => '<span class="badge badge-light-'.($category->brand_required ? 'primary' : 'secondary').'">'
-                .($category->brand_required ? __('Yes') : __('No')).'</span>')
-            ->addColumn('status', fn (Category $category) => '<span class="badge badge-light-'.($category->status ? 'success' : 'danger').'">'
-                .($category->status ? __('Active') : __('Inactive')).'</span>')
-            ->addColumn('action', fn (Category $category) =>
-                '<a href="'.route('categories.edit', $category).'" class="btn btn-sm btn-icon btn-light-primary me-2" title="'.__('Edit').'"><i class="fas fa-pen"></i></a>'
-                .'<form action="'.route('categories.destroy', $category).'" method="POST" class="d-inline delete-form">'
-                .csrf_field().method_field('DELETE')
-                .'<button type="submit" class="btn btn-sm btn-icon btn-light-danger" title="'.__('Delete').'"><i class="fas fa-trash"></i></button>'
-                .'</form>')
-            ->rawColumns(['brand_required', 'status', 'action'])
-            ->toJson();
+        return DataTables::of($query)
+            ->addColumn('products_count_badge', function ($row) {
+                return '<span class="badge badge-light">' . $row->products_count . '</span>';
+            })
+            ->addColumn('brand_required_badge', function ($row) {
+                return $row->brand_required
+                    ? '<span class="badge badge-light-primary">' . __("Yes") . '</span>'
+                    : '<span class="badge badge-light-secondary">' . __("No") . '</span>';
+            })
+            ->addColumn('status', function ($row) {
+                $checked    = $row->status ? 'checked' : '';
+                $badgeClass = $row->status ? 'badge-light-success' : 'badge-light-danger';
+                $label      = $row->status ? 'Active' : 'Inactive';
+                return '
+                    <div class="d-flex align-items-center gap-2">
+                        <span class="badge ' . $badgeClass . '">' . $label . '</span>
+                        <div class="form-check form-switch ms-2 mb-0">
+                            <input class="form-check-input status-toggle" type="checkbox"
+                                data-id="' . $row->id . '" ' . $checked . '>
+                        </div>
+                    </div>';
+            })
+            ->addColumn('action', function ($row) {
+                $html = '<div class="d-flex justify-content-end gap-2">'
+                    . '<button class="btn btn-sm btn-light-info btn-view p-6" data-id="' . $row->id . '">'
+                    . '<i class="fas fa-eye"></i>'
+                    . '</button>';
+
+                $html .= '<button class="btn btn-sm btn-light-primary btn-edit p-6" data-id="' . $row->id . '">'
+                    . '<i class="fas fa-edit"></i>'
+                    . '</button>';
+
+                $html .= '<button class="btn btn-sm btn-light-danger btn-delete p-6" data-id="' . $row->id . '">'
+                    . '<i class="fas fa-trash"></i>'
+                    . '</button>';
+
+                $html .= '</div>';
+
+                return $html;
+            })
+            ->rawColumns(['products_count_badge', 'brand_required_badge', 'status', 'action'])
+            ->make(true);
     }
 
-    public function create(): View
-    {
-        return view('products.categories.create');
-    }
-
-    public function store(Request $request): RedirectResponse
+    /**
+     * Store a newly created Category.
+     */
+    public function Store(Request $request): JsonResponse
     {
         $validated = $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'brand_required' => ['sometimes', 'boolean'],
+            'category_name'   => 'required|string|max:255|unique:categories,name',
+            'brand_required'  => 'nullable|in:0,1',
+            'category_status' => 'nullable|in:0,1',
         ]);
 
-        Category::create([
-            'name' => $validated['name'],
-            'brand_required' => $request->boolean('brand_required'),
+        $category = Category::create([
+            'name'           => $validated['category_name'],
+            'brand_required' => $validated['brand_required'] ?? 0,
+            'status'         => $validated['category_status'] ?? 1,
         ]);
 
-        return redirect()->route('categories.index')->with('status', __('Category created successfully.'));
+        return response()->json([
+            'success' => true,
+            'message' => 'Category created successfully.',
+            'data'    => $category,
+        ], 201);
     }
 
-    public function edit(Category $category): View
+    /**
+     * Show a single Category (used by edit & view AJAX fetch).
+     */
+    public function Show(int $id): JsonResponse
     {
-        return view('products.categories.edit', ['category' => $category]);
+        $category = Category::withCount('products')->findOrFail($id);
+
+        return response()->json([
+            'success' => true,
+            'data'    => [
+                'id'             => $category->id,
+                'name'           => $category->name,
+                'brand_required' => $category->brand_required,
+                'status'         => $category->status,
+                'products_count' => $category->products_count,
+                'created_at'     => $category->created_at?->format('d M Y, h:i A'),
+            ],
+        ]);
     }
 
-    public function update(Request $request, Category $category): RedirectResponse
+    /**
+     * Update an existing Category. (POST only)
+     */
+    public function Update(Request $request, int $id): JsonResponse
     {
         $validated = $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'brand_required' => ['sometimes', 'boolean'],
-            'status' => ['sometimes', 'boolean'],
+            'category_name'   => 'required|string|max:255|unique:categories,name,' . $id,
+            'brand_required'  => 'nullable|in:0,1',
+            'category_status' => 'nullable|in:0,1',
         ]);
 
+        $category = Category::findOrFail($id);
         $category->update([
-            'name' => $validated['name'],
-            'brand_required' => $request->boolean('brand_required'),
-            'status' => $request->boolean('status'),
+            'name'           => $validated['category_name'],
+            'brand_required' => $validated['brand_required'] ?? $category->brand_required,
+            'status'         => $validated['category_status'] ?? $category->status,
         ]);
 
-        return redirect()->route('categories.index')->with('status', __('Category updated successfully.'));
+        return response()->json([
+            'success' => true,
+            'message' => 'Category updated successfully.',
+            'data'    => $category,
+        ]);
     }
 
-    public function destroy(Category $category): RedirectResponse
+    /**
+     * Delete a Category. (POST only)
+     */
+    public function Delete(int $id): JsonResponse
     {
+        $category = Category::findOrFail($id);
+
         if ($category->products()->exists() || $category->subCategories()->exists()) {
-            return back()->with('error', __('This category has sub-categories or products linked to it and cannot be deleted.'));
+            return response()->json([
+                'success' => false,
+                'message' => 'This category has sub-categories or products linked to it and cannot be deleted.',
+            ], 422);
         }
 
         $category->delete();
 
-        return redirect()->route('categories.index')->with('status', __('Category deleted.'));
+        return response()->json([
+            'success' => true,
+            'message' => 'Category deleted successfully.',
+        ]);
+    }
+
+    /**
+     * Toggle the status.
+     */
+    public function ToggleStatus(int $id): JsonResponse
+    {
+        $category = Category::findOrFail($id);
+        $category->update(['status' => !$category->status]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Status updated successfully.',
+            'status'  => $category->status,
+        ]);
     }
 }
