@@ -15,6 +15,23 @@ class GlobalConstant
         ['code' => 'local_carpenter', 'en_name' => 'Local Carpenter', 'bn_name' => 'স্থানীয় কাঠমিস্ত্রি', 'status' => 1],
     ];
 
+    public const WOOD_TYPE = [
+        ['code' => 'akashi', 'en_name' => 'Akashi', 'bn_name' => 'অকাশি', 'status' => 1],
+        ['code' => 'shegun', 'en_name' => 'Shegun', 'bn_name' => 'সেগুন', 'status' => 1],
+        ['code' => 'mango', 'en_name' => 'Mango', 'bn_name' => 'আম', 'status' => 1],
+        ['code' => 'jackfruit', 'en_name' => 'Jackfruit', 'bn_name' => 'কাঁঠাল', 'status' => 1],
+        ['code' => 'shishu', 'en_name' => 'Shishu', 'bn_name' => 'শিশু', 'status' => 1],
+        ['code' => 'other', 'en_name' => 'Other', 'bn_name' => 'অন্যান্য', 'status' => 1],
+    ];
+
+    public const COLOR = [
+        ['code' => 'dark_brown', 'en_name' => 'Dark Brown', 'bn_name' => 'গাঢ় বাদামী', 'status' => 1],
+        ['code' => 'light_brown', 'en_name' => 'Light Brown', 'bn_name' => 'হালকা বাদামী', 'status' => 1],
+        ['code' => 'black', 'en_name' => 'Black', 'bn_name' => 'কালো', 'status' => 1],
+        ['code' => 'white', 'en_name' => 'White', 'bn_name' => 'সাদা', 'status' => 1],
+        ['code' => 'other', 'en_name' => 'Other', 'bn_name' => 'অন্যান্য', 'status' => 1],
+    ];
+
     public static function activeManufacturers()
     {
         return collect(self::MANUFACTURERS)
@@ -31,6 +48,42 @@ class GlobalConstant
         }
 
         return app()->getLocale() === 'bn' ? $manufacturer['bn_name'] : $manufacturer['en_name'];
+    }
+
+    public static function activeWoodTypes()
+    {
+        return collect(self::WOOD_TYPE)
+            ->where('status', 1)
+            ->values();
+    }
+
+    public static function woodTypeName(?string $code): ?string
+    {
+        $woodType = collect(self::WOOD_TYPE)->firstWhere('code', $code);
+
+        if (! $woodType) {
+            return null;
+        }
+
+        return app()->getLocale() === 'bn' ? $woodType['bn_name'] : $woodType['en_name'];
+    }
+
+    public static function activeColors()
+    {
+        return collect(self::COLOR)
+            ->where('status', 1)
+            ->values();
+    }
+
+    public static function colorName(?string $code): ?string
+    {
+        $color = collect(self::COLOR)->firstWhere('code', $code);
+
+        if (! $color) {
+            return null;
+        }
+
+        return app()->getLocale() === 'bn' ? $color['bn_name'] : $color['en_name'];
     }
 
 

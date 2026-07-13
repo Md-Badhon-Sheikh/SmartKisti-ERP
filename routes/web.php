@@ -63,16 +63,21 @@ Route::middleware('auth')->group(function () {
         });
     });
 
-    // ── Products ───────────────────────────────────────────────
-    Route::get('products', [ProductController::class, 'index'])->name('products.index');
-    Route::get('products/data', [ProductController::class, 'Datatable'])->name('products.data');
+    // ── Products — Create/Edit are full pages; List/View/Delete/Toggle stay AJAX ──
+    Route::get('products', [ProductController::class, 'Index'])->name('products.index');
+    Route::get('products/datatable', [ProductController::class, 'Datatable'])->name('products.datatable');
 
     Route::middleware('role:super-admin|admin|manager')->group(function () {
-        Route::get('products/create', [ProductController::class, 'create'])->name('products.create');
-        Route::post('products', [ProductController::class, 'store'])->name('products.store');
-        Route::get('products/{product}/edit', [ProductController::class, 'edit'])->name('products.edit');
-        Route::put('products/{product}', [ProductController::class, 'update'])->name('products.update');
-        Route::delete('products/{product}', [ProductController::class, 'destroy'])->name('products.destroy');
+        Route::get('products/create', [ProductController::class, 'Create'])->name('products.create');
+        Route::post('products', [ProductController::class, 'Store'])->name('products.store');
+        Route::get('products/{product}/edit', [ProductController::class, 'Edit'])->name('products.edit');
+        Route::put('products/{product}', [ProductController::class, 'Update'])->name('products.update');
+
+        Route::prefix('products')->name('products.')->group(function () {
+            Route::post('{id}/delete', [ProductController::class, 'Delete'])->name('delete');
+            Route::post('{id}/toggle', [ProductController::class, 'ToggleStatus'])->name('toggle');
+            Route::post('{id}/images/{imageId}/delete', [ProductController::class, 'DeleteImage'])->name('images.delete');
+        });
 
         // Categories — AJAX modal pattern (list/add/edit/view/delete/toggle all via JSON)
         Route::prefix('categories')->name('categories.')->group(function () {
@@ -108,5 +113,5 @@ Route::middleware('auth')->group(function () {
         });
     });
 
-    Route::get('products/{product}', [ProductController::class, 'show'])->name('products.show');
+    Route::get('products/{id}', [ProductController::class, 'Show'])->name('products.show');
 });

@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Enums\GlobalConstant;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Product extends Model
 {
@@ -57,5 +58,20 @@ class Product extends Model
     public function manufacturerName(): ?string
     {
         return GlobalConstant::manufacturerName($this->manufacturer_code);
+    }
+
+    public function woodTypeName(): ?string
+    {
+        return GlobalConstant::woodTypeName($this->wood_type);
+    }
+
+    public function colorName(): ?string
+    {
+        return GlobalConstant::colorName($this->color);
+    }
+
+    public function images(): HasMany
+    {
+        return $this->hasMany(ProductImage::class)->orderBy('sort_order');
     }
 }

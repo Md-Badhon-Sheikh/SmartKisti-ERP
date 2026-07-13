@@ -6,7 +6,7 @@
             </div>
         </div>
 
-        <form action="{{ route('products.store') }}" method="POST">
+        <form action="{{ route('products.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
             <div class="card-body border-top p-9">
                 @include('products._form')
