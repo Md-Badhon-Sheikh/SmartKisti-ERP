@@ -6,6 +6,7 @@ use App\Enums\GlobalConstant;
 use App\Http\Controllers\Controller;
 use App\Models\InstallmentPayment;
 use App\Models\InstallmentPlan;
+use App\Services\ReceiptService;
 use App\Services\Sms\SmsLogService;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
@@ -17,7 +18,10 @@ use Yajra\DataTables\Facades\DataTables;
 
 class InstallmentController extends Controller
 {
-    public function __construct(private readonly SmsLogService $smsLog) {}
+    public function __construct(
+        private readonly SmsLogService $smsLog,
+        private readonly ReceiptService $receipts,
+    ) {}
 
     /**
      * Display the index page.
@@ -69,7 +73,7 @@ class InstallmentController extends Controller
      */
     public function Show(InstallmentPlan $installmentPlan): View
     {
-        $installmentPlan->load(['sale', 'customer', 'payments.receivedBy']);
+        $installmentPlan->load(['sale', 'customer', 'payments.receivedBy', 'payments.receipts']);
 
         return view('installments.show', [
             'plan' => $installmentPlan,
@@ -130,6 +134,7 @@ class InstallmentController extends Controller
             'status' => $isCompleted ? 'completed' : $sale->status,
         ]);
 
+        $this->receipts->forInstallmentPayment($payment);
         $this->sendPaymentSms($payment->fresh('customer'), $remainingDue);
 
         return redirect()->route('installments.show', $installmentPlan->id)->with('status', __('Payment recorded successfully.'));
@@ -180,6 +185,7 @@ class InstallmentController extends Controller
                 'amount' => $plan->monthly_amount,
                 'paid' => (bool) $payment,
                 'payment' => $payment,
+                'receipt' => $payment?->receipts->first(),
             ];
         }
 

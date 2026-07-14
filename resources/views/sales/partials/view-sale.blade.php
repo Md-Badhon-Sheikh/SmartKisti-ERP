@@ -66,6 +66,14 @@
                 + '</a></div>';
         }
 
+        let receiptLink = '';
+        if (data.receipt_id) {
+            receiptLink = '<div class="mb-4">'
+                + '<a href="{{ url('receipts') }}/' + data.receipt_id + '" target="_blank" class="btn btn-sm btn-light-primary">'
+                + '<i class="fas fa-receipt me-1"></i> {{ __('View Receipt') }}'
+                + '</a></div>';
+        }
+
         const html = ''
             + row('{{ __('Invoice No') }}', esc(data.invoice_no))
             + row('{{ __('Customer') }}', esc(data.customer_name) + (data.customer_mobile ? ' (' + esc(data.customer_mobile) + ')' : ''))
@@ -81,6 +89,7 @@
             + row('{{ __('Due Amount') }}', money(data.due_amount))
             + row('{{ __('Status') }}', statusBadge)
             + installmentLink
+            + receiptLink
             + row('{{ __('Created By') }}', data.created_by ? esc(data.created_by) : '')
             + row('{{ __('Created At') }}', data.created_at ?? '—');
 

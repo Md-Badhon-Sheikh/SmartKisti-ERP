@@ -122,6 +122,7 @@
                             <th>{{ __('Payment Method') }}</th>
                             <th>{{ __('Receipt No') }}</th>
                             <th>{{ __('Received By') }}</th>
+                            <th>{{ __('Receipt') }}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -141,6 +142,15 @@
                                 <td>{{ $row['payment']?->paymentMethodName() ?? '—' }}</td>
                                 <td>{{ $row['payment']?->receipt_no ?? '—' }}</td>
                                 <td>{{ $row['payment']?->receivedBy?->name ?? '—' }}</td>
+                                <td>
+                                    @if ($row['receipt'])
+                                        <a href="{{ route('receipts.show', $row['receipt']) }}" target="_blank" class="btn btn-sm btn-icon btn-light-primary" title="{{ __('View Receipt') }}">
+                                            <i class="fas fa-receipt"></i>
+                                        </a>
+                                    @else
+                                        —
+                                    @endif
+                                </td>
                             </tr>
                         @endforeach
                     </tbody>

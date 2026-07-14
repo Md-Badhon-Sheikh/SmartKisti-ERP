@@ -15,6 +15,7 @@ use App\Http\Controllers\Product\CategoryController;
 use App\Http\Controllers\Product\ProductController;
 use App\Http\Controllers\Product\SubCategoryController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ReceiptController;
 use App\Http\Controllers\Sale\SaleController;
 use App\Http\Controllers\SmsLogController;
 use App\Http\Controllers\UserManagementController;
@@ -202,4 +203,12 @@ Route::middleware('auth')->group(function () {
         Route::get('sms-logs', [SmsLogController::class, 'Index'])->name('sms-logs.index');
         Route::get('sms-logs/datatable', [SmsLogController::class, 'Datatable'])->name('sms-logs.datatable');
     });
+
+    // ── Receipts — auto-generated whenever a Sale or Installment payment is recorded ──
+    Route::middleware('role:super-admin|admin|manager')->group(function () {
+        Route::get('receipts', [ReceiptController::class, 'Index'])->name('receipts.index');
+        Route::get('receipts/datatable', [ReceiptController::class, 'Datatable'])->name('receipts.datatable');
+    });
+
+    Route::get('receipts/{receipt}', [ReceiptController::class, 'Show'])->name('receipts.show');
 });

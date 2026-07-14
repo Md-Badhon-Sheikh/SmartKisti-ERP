@@ -62,4 +62,9 @@ class InstallmentPayment extends Model
     {
         return $this->hasMany(SmsLog::class);
     }
+
+    public function receipts(): HasMany
+    {
+        return $this->hasMany(Receipt::class, 'payment_id');
+    }
 }

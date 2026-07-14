@@ -8,6 +8,7 @@ use App\Models\InstallmentPlan;
 use App\Models\Product;
 use App\Models\Sale;
 use App\Models\SaleItem;
+use App\Services\ReceiptService;
 use App\Services\Sms\SmsLogService;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
@@ -20,7 +21,10 @@ use Yajra\DataTables\Facades\DataTables;
 
 class SaleController extends Controller
 {
-    public function __construct(private readonly SmsLogService $smsLog) {}
+    public function __construct(
+        private readonly SmsLogService $smsLog,
+        private readonly ReceiptService $receipts,
+    ) {}
 
     /**
      * Display the index page.
@@ -102,6 +106,7 @@ class SaleController extends Controller
             return $this->persistSale($request, $validated);
         });
 
+        $this->receipts->forSale($sale);
         $this->sendInvoiceSms($sale->load('customer'));
 
         return redirect()->route('sales.index')->with('status', __('Sale created successfully.'));
@@ -127,7 +132,7 @@ class SaleController extends Controller
      */
     public function Show(int $id): JsonResponse
     {
-        $sale = Sale::with(['customer', 'items.product', 'installmentPlan', 'createdBy'])->findOrFail($id);
+        $sale = Sale::with(['customer', 'items.product', 'installmentPlan', 'createdBy', 'receipts'])->findOrFail($id);
 
         return response()->json([
             'success' => true,
@@ -154,6 +159,7 @@ class SaleController extends Controller
                 'due_amount' => $sale->due_amount,
                 'status' => $sale->status,
                 'installment_plan_id' => $sale->installmentPlan?->id,
+                'receipt_id' => $sale->receipts->first()?->id,
                 'created_by' => $sale->createdBy?->name,
                 'created_at' => $sale->created_at?->format('d M Y, h:i A'),
             ],

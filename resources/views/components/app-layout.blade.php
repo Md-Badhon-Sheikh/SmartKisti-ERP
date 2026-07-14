@@ -338,6 +338,18 @@
                                 <span class="menu-title">{{ __('SMS Logs') }}</span>
                             </a>
                         </div>
+
+                        <div class="menu-item">
+                            <a class="menu-link {{ request()->routeIs('receipts.*') ? 'active' : '' }}" href="{{ route('receipts.index') }}">
+                                <span class="menu-icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M6 2h9l3 3v17H6z"/>
+                                    <path d="M9 8h6M9 12h6M9 16h4"/>
+                                    </svg>
+                                </span>
+                                <span class="menu-title">{{ __('Receipts') }}</span>
+                            </a>
+                        </div>
                         @endhasanyrole
 
                         @hasanyrole('super-admin|admin')
