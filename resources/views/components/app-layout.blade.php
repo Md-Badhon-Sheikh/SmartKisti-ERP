@@ -154,16 +154,59 @@
                             </div>
                         </div>
 
-                        <div class="menu-item">
-                            <a class="menu-link {{ request()->routeIs('customers.index') ? 'active' : '' }}" href="{{ route('customers.index') }}">
+                        <div data-kt-menu-trigger="click"
+                             class="menu-item menu-accordion {{ request()->routeIs('customers.*', 'areas.*') ? 'hover show active' : '' }}">
+                            <span class="menu-link">
                                 <span class="menu-icon">
                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                                     <circle cx="12" cy="8" r="4"/>
                                     <path d="M4.5 20.5a7.5 7.5 0 0 1 15 0"/>
                                     </svg>
                                 </span>
-                                <span class="menu-title">{{ __('Customers') }}</span>
-                            </a>
+                                <span class="menu-title">{{ __('Customer Management') }}</span>
+                                <span class="menu-arrow"></span>
+                            </span>
+                            <div class="menu-sub menu-sub-accordion menu-active-bg">
+                                <div class="menu-item" style="margin-left: 20px;">
+                                    <a class="menu-link {{ request()->routeIs('customers.index') ? 'active' : '' }}" href="{{ route('customers.index') }}">
+                                        <span class="menu-bullet">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                            <rect x="3" y="12" width="8" height="8" rx="1"/>
+                                            <rect x="13" y="12" width="8" height="8" rx="1"/>
+                                            <rect x="8" y="4" width="8" height="8" rx="1" fill="none"/>
+                                            <path d="M12 4v3M7 12v3M17 12v3"/>
+                                            </svg>
+                                        </span>
+                                        <span class="menu-title">{{ __('All Customers') }}</span>
+                                    </a>
+                                </div>
+                                @hasanyrole('super-admin|admin|manager')
+                                <div class="menu-item" style="margin-left: 20px;">
+                                    <a class="menu-link {{ request()->routeIs('customers.create') ? 'active' : '' }}" href="{{ route('customers.create') }}">
+                                        <span class="menu-bullet">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                            <rect x="3" y="12" width="8" height="8" rx="1"/>
+                                            <rect x="13" y="12" width="8" height="8" rx="1"/>
+                                            <rect x="8" y="4" width="8" height="8" rx="1" fill="none"/>
+                                            <path d="M17 7v6"/>
+                                            <path d="M14 10h6"/>
+                                            </svg>
+                                        </span>
+                                        <span class="menu-title">{{ __('New Customer') }}</span>
+                                    </a>
+                                </div>
+                                <div class="menu-item" style="margin-left: 20px;">
+                                    <a class="menu-link {{ request()->routeIs('areas.*') ? 'active' : '' }}" href="{{ route('areas.index') }}">
+                                        <span class="menu-bullet">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M3 6a2 2 0 0 1 2-2h4.2a2 2 0 0 1 1.6.8l1 1.4a2 2 0 0 0 1.6.8H19a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6z"/>
+                                            </svg>
+                                        </span>
+                                        <span class="menu-title">{{ __('Areas') }}</span>
+                                    </a>
+                                </div>
+                                @endhasanyrole
+                            </div>
                         </div>
 
                         @hasanyrole('super-admin|admin')

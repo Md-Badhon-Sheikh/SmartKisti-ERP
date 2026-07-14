@@ -4,6 +4,8 @@ use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\Auth\OtpVerificationController;
+use App\Http\Controllers\Customer\AreaController;
+use App\Http\Controllers\Customer\CustomerController;
 use App\Http\Controllers\LocaleController;
 use App\Http\Controllers\Product\BrandController;
 use App\Http\Controllers\Product\CategoryController;
@@ -40,7 +42,6 @@ Route::middleware('auth')->group(function () {
     Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
 
     Route::view('dashboard', 'dashboard')->name('dashboard');
-    Route::view('customers', 'customers.index')->name('customers.index');
 
     Route::get('profile', [ProfileController::class, 'show'])->name('profile.show');
     Route::get('profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -114,4 +115,34 @@ Route::middleware('auth')->group(function () {
     });
 
     Route::get('products/{id}', [ProductController::class, 'Show'])->name('products.show');
+
+    // ── Customers — Create/Edit are full pages; List/View/Delete/Toggle stay AJAX ──
+    Route::get('customers', [CustomerController::class, 'Index'])->name('customers.index');
+    Route::get('customers/datatable', [CustomerController::class, 'Datatable'])->name('customers.datatable');
+
+    Route::middleware('role:super-admin|admin|manager')->group(function () {
+        Route::get('customers/create', [CustomerController::class, 'Create'])->name('customers.create');
+        Route::post('customers', [CustomerController::class, 'Store'])->name('customers.store');
+        Route::get('customers/{customer}/edit', [CustomerController::class, 'Edit'])->name('customers.edit');
+        Route::put('customers/{customer}', [CustomerController::class, 'Update'])->name('customers.update');
+
+        Route::prefix('customers')->name('customers.')->group(function () {
+            Route::post('{id}/delete', [CustomerController::class, 'Delete'])->name('delete');
+            Route::post('{id}/toggle', [CustomerController::class, 'ToggleStatus'])->name('toggle');
+            Route::post('{id}/documents/{documentId}/delete', [CustomerController::class, 'DeleteDocument'])->name('documents.delete');
+        });
+
+        // Areas — AJAX modal pattern (list/add/edit/view/delete/toggle all via JSON)
+        Route::prefix('areas')->name('areas.')->group(function () {
+            Route::get('/', [AreaController::class, 'Index'])->name('index');
+            Route::get('datatable', [AreaController::class, 'Datatable'])->name('datatable');
+            Route::post('/', [AreaController::class, 'Store'])->name('store');
+            Route::get('{id}', [AreaController::class, 'Show'])->name('show');
+            Route::post('{id}/update', [AreaController::class, 'Update'])->name('update');
+            Route::post('{id}/delete', [AreaController::class, 'Delete'])->name('delete');
+            Route::post('{id}/toggle', [AreaController::class, 'ToggleStatus'])->name('toggle');
+        });
+    });
+
+    Route::get('customers/{id}', [CustomerController::class, 'Show'])->name('customers.show');
 });
