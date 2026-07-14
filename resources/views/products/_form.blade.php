@@ -5,7 +5,7 @@
 <div class="row">
     <div class="col-md-4 mb-6">
         <label class="col-form-label required fw-bold fs-6">{{ __('Name') }}</label>
-        <input type="text" name="name" class="form-control form-control-solid" value="{{ old('name', $product?->name) }}" required>
+        <input type="text" name="name" class="form-control form-control-solid" placeholder="{{ __('Enter Product Name') }}" value="{{ old('name', $product?->name) }}" required>
         @error('name')
             <div class="text-danger fs-7 mt-1">{{ $message }}</div>
         @enderror
@@ -63,7 +63,7 @@
 
     <div class="col-md-4 mb-6 stock-section">
         <label class="col-form-label fw-bold fs-6">{{ __('Stock') }}</label>
-        <input type="number" name="stock" min="0" class="form-control   form-control-solid" value="{{ old('stock', $product?->stock ?? 0) }}">
+        <input type="text" name="stock" min="0" class="form-control   form-control-solid" placeholder="{{ __('e.g. 10') }}" value="{{ old('stock', $product?->stock ?? 0) }}">
         <div class="form-text">{{ __('Stock only applies to Ready Products. Custom Products are made to order.') }}</div>
         @error('stock')
             <div class="text-danger fs-7 mt-1">{{ $message }}</div>
@@ -87,12 +87,12 @@
 
     <div class="col-md-4 mb-6">
         <label class="col-form-label fw-bold fs-6">{{ __('Model Number') }}</label>
-        <input type="text" name="model" class="form-control   form-control-solid" value="{{ old('model', $product?->model) }}">
+        <input type="text" name="model" class="form-control   form-control-solid" placeholder="{{ __('Enter Model Number') }}" value="{{ old('model', $product?->model) }}">
     </div>
 
     <div class="col-md-4 mb-6">
         <label class="col-form-label fw-bold fs-6">{{ __('IMEI / Serial Number') }}</label>
-        <input type="text" name="imei_serial" class="form-control   form-control-solid" value="{{ old('imei_serial', $product?->imei_serial) }}">
+        <input type="text" name="imei_serial" class="form-control   form-control-solid" placeholder="{{ __('Enter IMEI / Serial Number') }}" value="{{ old('imei_serial', $product?->imei_serial) }}">
     </div>
 
 
@@ -154,20 +154,20 @@
 
     <div class="col-md-4 mb-6">
         <label class="col-form-label fw-bold fs-6">{{ __('Warranty') }}</label>
-        <input type="text" name="warranty" class="form-control   form-control-solid" placeholder="{{ __('e.g. 24 Months') }}" value="{{ old('warranty', $product?->warranty) }}">
+        <input type="text" name="warranty" class="form-control   form-control-solid" placeholder="{{ __('Enter Warranty Information') }}" value="{{ old('warranty', $product?->warranty) }}">
     </div>
 
     <div class="col-md-4 mb-6">
         <label class="col-form-label fw-bold fs-6">SKU</label>
-        <input type="text" name="sku" class="form-control   form-control-solid" value="{{ old('sku', $product?->sku) }}">
+        <input type="text" name="sku" class="form-control   form-control-solid" placeholder="{{ __('Enter SKU') }}" value="{{ old('sku', $product?->sku) }}">
         @error('sku')
             <div class="text-danger fs-7 mt-1">{{ $message }}</div>
         @enderror
     </div>
 
     <div class="col-md-4 mb-6">
-        <label class="col-form-label required fw-bold fs-6">{{ __('Purchase Price') }}</label>
-        <input type="number" step="0.01" min="0" name="purchase_price" class="form-control   form-control-solid" value="{{ old('purchase_price', $product?->purchase_price) }}" required>
+        <label class="col-form-label fw-bold fs-6">{{ __('Purchase Price') }}</label>
+        <input type="text" step="0.01" min="0" name="purchase_price" class="form-control   form-control-solid" placeholder="{{ __('Enter Purchase Price') }}" value="{{ old('purchase_price', $product?->purchase_price) }}">
         @error('purchase_price')
             <div class="text-danger fs-7 mt-1">{{ $message }}</div>
         @enderror
@@ -175,7 +175,7 @@
 
     <div class="col-md-4 mb-6">
         <label class="col-form-label required fw-bold fs-6">{{ __('Selling Price') }}</label>
-        <input type="number" step="0.01" min="0" name="selling_price" class="form-control   form-control-solid" value="{{ old('selling_price', $product?->selling_price) }}" required>
+        <input type="text" step="0.01" min="0" name="selling_price" class="form-control   form-control-solid" placeholder="{{ __('Enter Selling Price') }}" value="{{ old('selling_price', $product?->selling_price) }}" required>
         @error('selling_price')
             <div class="text-danger fs-7 mt-1">{{ $message }}</div>
         @enderror

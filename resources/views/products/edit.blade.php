@@ -1,8 +1,12 @@
 <x-app-layout :title="__('Edit Product')">
-    <div class="card mb-5 mb-xl-10">
+    <div class="card my-5 mb-xl-10">
         <div class="card-header border-0 pt-6">
-            <div class="card-title m-0">
+            <div class="card-title m-0 d-flex align-items-center justify-content-between w-100">
                 <h3 class="fw-bolder m-0">{{ $product->name }}</h3>
+                  <div>
+                    <a href="javascript:void(0)" onclick="history.back()" class="btn btn-light-primary border btn-sm">
+                        <i class="fas fa-arrow-left me-1"></i>{{ __('Back') }}</a>
+                </div>
             </div>
         </div>
 

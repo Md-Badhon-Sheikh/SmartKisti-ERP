@@ -136,5 +136,18 @@
     "Product updated successfully.": "পণ্য সফলভাবে আপডেট হয়েছে।",
     "Product deleted.": "পণ্য ডিলিট হয়েছে।",
     "The selected sub category does not belong to the selected category.": "নির্বাচিত সাব ক্যাটাগরিটি নির্বাচিত ক্যাটাগরির অধীনে নেই।",
-    "Brand is required for this category.": "এই ক্যাটাগরির জন্য ব্র্যান্ড আবশ্যক।"
+    "Brand is required for this category.": "এই ক্যাটাগরির জন্য ব্র্যান্ড আবশ্যক।",
+    "Status": "স্ট্যাটাস",
+    "Product List": "পণ্যের তালিকা",
+    "Add Product": "পণ্য যোগ করুন",
+    "Enter Product Name": "পণ্যের নাম লিখুন",
+    "Enter Model Number": "মডেল নম্বর লিখুন",
+    "Enter IMEI / Serial Number": "IMEI / সিরিয়াল নম্বর লিখুন",
+    "Enter Warranty Information": "ওয়ারেন্টি তথ্য লিখুন",
+    "SKU": "SKU",
+    "Enter SKU": "SKU লিখুন",
+    "Enter Purchase Price": "ক্রয় মূল্য লিখুন",
+    "Enter Selling Price": "বিক্রয় মূল্য লিখুন",
+    "Images": "ছবি",
+    "You can select multiple images.": "আপনি একাধিক ছবি নির্বাচন করতে পারেন।"
 }
