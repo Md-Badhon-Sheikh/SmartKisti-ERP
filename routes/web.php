@@ -6,12 +6,14 @@ use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\Auth\OtpVerificationController;
 use App\Http\Controllers\Customer\AreaController;
 use App\Http\Controllers\Customer\CustomerController;
+use App\Http\Controllers\Installment\InstallmentController;
 use App\Http\Controllers\LocaleController;
 use App\Http\Controllers\Product\BrandController;
 use App\Http\Controllers\Product\CategoryController;
 use App\Http\Controllers\Product\ProductController;
 use App\Http\Controllers\Product\SubCategoryController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Sale\SaleController;
 use App\Http\Controllers\UserManagementController;
 use Illuminate\Support\Facades\Route;
 
@@ -145,4 +147,30 @@ Route::middleware('auth')->group(function () {
     });
 
     Route::get('customers/{id}', [CustomerController::class, 'Show'])->name('customers.show');
+
+    // ── Sales — Create/Edit are full pages; List/View/Delete stay AJAX ──
+    Route::get('sales', [SaleController::class, 'Index'])->name('sales.index');
+    Route::get('sales/datatable', [SaleController::class, 'Datatable'])->name('sales.datatable');
+
+    Route::middleware('role:super-admin|admin|manager')->group(function () {
+        Route::get('sales/create', [SaleController::class, 'Create'])->name('sales.create');
+        Route::post('sales', [SaleController::class, 'Store'])->name('sales.store');
+        Route::get('sales/{sale}/edit', [SaleController::class, 'Edit'])->name('sales.edit');
+        Route::put('sales/{sale}', [SaleController::class, 'Update'])->name('sales.update');
+
+        Route::prefix('sales')->name('sales.')->group(function () {
+            Route::post('{id}/delete', [SaleController::class, 'Delete'])->name('delete');
+        });
+    });
+
+    Route::get('sales/{id}', [SaleController::class, 'Show'])->name('sales.show');
+
+    // ── Installment Plans — list + schedule/payment collection page ──
+    Route::get('installments', [InstallmentController::class, 'Index'])->name('installments.index');
+    Route::get('installments/datatable', [InstallmentController::class, 'Datatable'])->name('installments.datatable');
+    Route::get('installments/{installmentPlan}', [InstallmentController::class, 'Show'])->name('installments.show');
+
+    Route::middleware('role:super-admin|admin|manager')->group(function () {
+        Route::post('installments/{installmentPlan}/payments', [InstallmentController::class, 'StorePayment'])->name('installments.payments.store');
+    });
 });

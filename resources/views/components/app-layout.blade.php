@@ -209,6 +209,64 @@
                             </div>
                         </div>
 
+                        <div data-kt-menu-trigger="click"
+                             class="menu-item menu-accordion {{ request()->routeIs('sales.*', 'installments.*') ? 'hover show active' : '' }}">
+                            <span class="menu-link">
+                                <span class="menu-icon">
+                                   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M3 3h2l2.4 12.2a2 2 0 0 0 2 1.6h7.6a2 2 0 0 0 2-1.6L21 7H6"/>
+                                    <circle cx="9" cy="21" r="1"/>
+                                    <circle cx="18" cy="21" r="1"/>
+                                    </svg>
+                                </span>
+                                <span class="menu-title">{{ __('Sales Management') }}</span>
+                                <span class="menu-arrow"></span>
+                            </span>
+                            <div class="menu-sub menu-sub-accordion menu-active-bg">
+                                <div class="menu-item" style="margin-left: 20px;">
+                                    <a class="menu-link {{ request()->routeIs('sales.index') ? 'active' : '' }}" href="{{ route('sales.index') }}">
+                                        <span class="menu-bullet">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                            <rect x="3" y="12" width="8" height="8" rx="1"/>
+                                            <rect x="13" y="12" width="8" height="8" rx="1"/>
+                                            <rect x="8" y="4" width="8" height="8" rx="1" fill="none"/>
+                                            <path d="M12 4v3M7 12v3M17 12v3"/>
+                                            </svg>
+                                        </span>
+                                        <span class="menu-title">{{ __('All Sales') }}</span>
+                                    </a>
+                                </div>
+                                @hasanyrole('super-admin|admin|manager')
+                                <div class="menu-item" style="margin-left: 20px;">
+                                    <a class="menu-link {{ request()->routeIs('sales.create') ? 'active' : '' }}" href="{{ route('sales.create') }}">
+                                        <span class="menu-bullet">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                            <rect x="3" y="12" width="8" height="8" rx="1"/>
+                                            <rect x="13" y="12" width="8" height="8" rx="1"/>
+                                            <rect x="8" y="4" width="8" height="8" rx="1" fill="none"/>
+                                            <path d="M17 7v6"/>
+                                            <path d="M14 10h6"/>
+                                            </svg>
+                                        </span>
+                                        <span class="menu-title">{{ __('New Sale') }}</span>
+                                    </a>
+                                </div>
+                                @endhasanyrole
+                                <div class="menu-item" style="margin-left: 20px;">
+                                    <a class="menu-link {{ request()->routeIs('installments.*') ? 'active' : '' }}" href="{{ route('installments.index') }}">
+                                        <span class="menu-bullet">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                            <rect x="3" y="4" width="18" height="18" rx="2"/>
+                                            <path d="M3 9h18"/>
+                                            <path d="M8 2v4M16 2v4"/>
+                                            </svg>
+                                        </span>
+                                        <span class="menu-title">{{ __('Installment Plans') }}</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
                         @hasanyrole('super-admin|admin')
                         <div data-kt-menu-trigger="click"
                              class="menu-item menu-accordion {{ request()->routeIs('users.*') ? 'hover show active' : '' }}">

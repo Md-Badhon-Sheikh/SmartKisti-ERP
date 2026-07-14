@@ -86,7 +86,32 @@ class GlobalConstant
         return app()->getLocale() === 'bn' ? $color['bn_name'] : $color['en_name'];
     }
 
+    public const PAYMENT_METHOD = [
+        ['code' => 'cash', 'en_name' => 'Cash', 'bn_name' => 'নগদ', 'status' => 1],
+        ['code' => 'bkash', 'en_name' => 'bKash', 'bn_name' => 'বিকাশ', 'status' => 1],
+        ['code' => 'nagad', 'en_name' => 'Nagad', 'bn_name' => 'নগদ (মোবাইল ব্যাংকিং)', 'status' => 1],
+        ['code' => 'rocket', 'en_name' => 'Rocket', 'bn_name' => 'রকেট', 'status' => 1],
+        ['code' => 'bank_transfer', 'en_name' => 'Bank Transfer', 'bn_name' => 'ব্যাংক ট্রান্সফার', 'status' => 1],
+        ['code' => 'other', 'en_name' => 'Other', 'bn_name' => 'অন্যান্য', 'status' => 1],
+    ];
 
+    public static function activePaymentMethods()
+    {
+        return collect(self::PAYMENT_METHOD)
+            ->where('status', 1)
+            ->values();
+    }
+
+    public static function paymentMethodName(?string $code): ?string
+    {
+        $paymentMethod = collect(self::PAYMENT_METHOD)->firstWhere('code', $code);
+
+        if (! $paymentMethod) {
+            return null;
+        }
+
+        return app()->getLocale() === 'bn' ? $paymentMethod['bn_name'] : $paymentMethod['en_name'];
+    }
 
     public static function getSymbolByCode(string $code): ?array
     {
