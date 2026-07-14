@@ -5,79 +5,164 @@ namespace App\Http\Controllers\Product;
 use App\Http\Controllers\Controller;
 use App\Models\Brand;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\View\View;
 use Yajra\DataTables\Facades\DataTables;
 
 class BrandController extends Controller
 {
-    public function index(): View
+    /**
+     * Display the index page.
+     */
+    public function Index()
     {
         return view('products.brands.index');
     }
 
-    public function Datatable(): JsonResponse
+    /**
+     * Return DataTable JSON for the listing.
+     */
+    public function Datatable(Request $request): JsonResponse
     {
-        $brands = Brand::select('brands.*')->withCount('products');
+        $query = Brand::select(['id', 'name', 'status', 'created_at'])
+            ->withCount('products');
 
-        return DataTables::eloquent($brands)
-            ->addColumn('status', fn (Brand $brand) => '<span class="badge badge-light-'.($brand->status ? 'success' : 'danger').'">'
-                .($brand->status ? __('Active') : __('Inactive')).'</span>')
-            ->addColumn('action', fn (Brand $brand) =>
-                '<a href="'.route('brands.edit', $brand).'" class="btn btn-sm btn-icon btn-light-primary me-2" title="'.__('Edit').'"><i class="fas fa-pen"></i></a>'
-                .'<form action="'.route('brands.destroy', $brand).'" method="POST" class="d-inline delete-form">'
-                .csrf_field().method_field('DELETE')
-                .'<button type="submit" class="btn btn-sm btn-icon btn-light-danger" title="'.__('Delete').'"><i class="fas fa-trash"></i></button>'
-                .'</form>')
-            ->rawColumns(['status', 'action'])
-            ->toJson();
+        return DataTables::of($query)
+            ->addColumn('products_count_badge', function ($row) {
+                return '<span class="badge badge-light">' . $row->products_count . '</span>';
+            })
+            ->addColumn('status', function ($row) {
+                $checked    = $row->status ? 'checked' : '';
+                $badgeClass = $row->status ? 'badge-light-success' : 'badge-light-danger';
+                $label      = $row->status ? __('Active') : __('Inactive');
+                return '
+                    <div class="d-flex align-items-center gap-2">
+                        <span class="badge ' . $badgeClass . '">' . $label . '</span>
+                        <div class="form-check form-switch ms-2 mb-0">
+                            <input class="form-check-input status-toggle" type="checkbox"
+                                data-id="' . $row->id . '" ' . $checked . '>
+                        </div>
+                    </div>';
+            })
+            ->addColumn('action', function ($row) {
+                $html = '<div class="d-flex justify-content-end gap-2">'
+                    . '<button class="btn btn-light-info btn-view px-4 py-2" data-id="' . $row->id . '">'
+                    . '<i class="fas fa-eye"></i>'
+                    . '</button>';
+
+                $html .= '<button class="btn btn-sm btn-light-primary btn-edit px-4 py-2" data-id="' . $row->id . '">'
+                    . '<i class="fas fa-edit"></i>'
+                    . '</button>';
+
+                $html .= '<button class="btn btn-sm btn-light-danger btn-delete px-4 py-2" data-id="' . $row->id . '">'
+                    . '<i class="fas fa-trash"></i>'
+                    . '</button>';
+
+                $html .= '</div>';
+
+                return $html;
+            })
+            ->rawColumns(['products_count_badge', 'status', 'action'])
+            ->make(true);
     }
 
-    public function create(): View
-    {
-        return view('products.brands.create');
-    }
-
-    public function store(Request $request): RedirectResponse
+    /**
+     * Store a newly created Brand.
+     */
+    public function Store(Request $request): JsonResponse
     {
         $validated = $request->validate([
-            'name' => ['required', 'string', 'max:255'],
+            'brand_name'   => 'required|string|max:255|unique:brands,name',
+            'brand_status' => 'nullable|in:0,1',
         ]);
 
-        Brand::create($validated);
+        $brand = Brand::create([
+            'name'   => $validated['brand_name'],
+            'status' => $validated['brand_status'] ?? 1,
+        ]);
 
-        return redirect()->route('brands.index')->with('status', __('Brand created successfully.'));
+        return response()->json([
+            'success' => true,
+            'message' => 'Brand created successfully.',
+            'data'    => $brand,
+        ], 201);
     }
 
-    public function edit(Brand $brand): View
+    /**
+     * Show a single Brand (used by edit & view AJAX fetch).
+     */
+    public function Show(int $id): JsonResponse
     {
-        return view('products.brands.edit', ['brand' => $brand]);
+        $brand = Brand::withCount('products')->findOrFail($id);
+
+        return response()->json([
+            'success' => true,
+            'data'    => [
+                'id'             => $brand->id,
+                'name'           => $brand->name,
+                'status'         => $brand->status,
+                'products_count' => $brand->products_count,
+                'created_at'     => $brand->created_at?->format('d M Y, h:i A'),
+            ],
+        ]);
     }
 
-    public function update(Request $request, Brand $brand): RedirectResponse
+    /**
+     * Update an existing Brand. (POST only)
+     */
+    public function Update(Request $request, int $id): JsonResponse
     {
         $validated = $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'status' => ['sometimes', 'boolean'],
+            'brand_name'   => 'required|string|max:255|unique:brands,name,' . $id,
+            'brand_status' => 'nullable|in:0,1',
         ]);
 
+        $brand = Brand::findOrFail($id);
         $brand->update([
-            'name' => $validated['name'],
-            'status' => $request->boolean('status'),
+            'name'   => $validated['brand_name'],
+            'status' => $validated['brand_status'] ?? $brand->status,
         ]);
 
-        return redirect()->route('brands.index')->with('status', __('Brand updated successfully.'));
+        return response()->json([
+            'success' => true,
+            'message' => 'Brand updated successfully.',
+            'data'    => $brand,
+        ]);
     }
 
-    public function destroy(Brand $brand): RedirectResponse
+    /**
+     * Delete a Brand. (POST only)
+     */
+    public function Delete(int $id): JsonResponse
     {
+        $brand = Brand::findOrFail($id);
+
         if ($brand->products()->exists()) {
-            return back()->with('error', __('This brand has products linked to it and cannot be deleted.'));
+            return response()->json([
+                'success' => false,
+                'message' => 'This brand has products linked to it and cannot be deleted.',
+            ], 422);
         }
 
         $brand->delete();
 
-        return redirect()->route('brands.index')->with('status', __('Brand deleted.'));
+        return response()->json([
+            'success' => true,
+            'message' => 'Brand deleted successfully.',
+        ]);
+    }
+
+    /**
+     * Toggle the status.
+     */
+    public function ToggleStatus(int $id): JsonResponse
+    {
+        $brand = Brand::findOrFail($id);
+        $brand->update(['status' => !$brand->status]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Status updated successfully.',
+            'status'  => $brand->status,
+        ]);
     }
 }

@@ -32,13 +32,13 @@ class CategoryController extends Controller
             })
             ->addColumn('brand_required_badge', function ($row) {
                 return $row->brand_required
-                    ? '<span class="badge badge-light-primary">' . __("Yes") . '</span>'
-                    : '<span class="badge badge-light-secondary">' . __("No") . '</span>';
+                    ? '<span class="badge badge-light-primary">' . __('Yes') . '</span>'
+                    : '<span class="badge badge-light-secondary">' . __('No') . '</span>';
             })
             ->addColumn('status', function ($row) {
                 $checked    = $row->status ? 'checked' : '';
                 $badgeClass = $row->status ? 'badge-light-success' : 'badge-light-danger';
-                $label      = $row->status ? 'Active' : 'Inactive';
+                $label      = $row->status ? __('Active') : __('Inactive');
                 return '
                     <div class="d-flex align-items-center gap-2">
                         <span class="badge ' . $badgeClass . '">' . $label . '</span>
@@ -50,15 +50,15 @@ class CategoryController extends Controller
             })
             ->addColumn('action', function ($row) {
                 $html = '<div class="d-flex justify-content-end gap-2">'
-                    . '<button class="btn btn-sm btn-light-info btn-view p-6" data-id="' . $row->id . '">'
+                    . '<button class="btn btn-light-info btn-view px-4 py-2" data-id="' . $row->id . '">'
                     . '<i class="fas fa-eye"></i>'
                     . '</button>';
 
-                $html .= '<button class="btn btn-sm btn-light-primary btn-edit p-6" data-id="' . $row->id . '">'
+                $html .= '<button class="btn btn-sm btn-light-primary btn-edit px-4 py-2" data-id="' . $row->id . '">'
                     . '<i class="fas fa-edit"></i>'
                     . '</button>';
 
-                $html .= '<button class="btn btn-sm btn-light-danger btn-delete p-6" data-id="' . $row->id . '">'
+                $html .= '<button class="btn btn-sm btn-light-danger btn-delete px-4 py-2" data-id="' . $row->id . '">'
                     . '<i class="fas fa-trash"></i>'
                     . '</button>';
 

@@ -14,7 +14,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastr@2.1.4/build/toastr.min.css">
 
     <link href="{{ asset('admin/assets/plugins/custom/datatables/datatables.bundle.css') }}" rel="stylesheet" type="text/css">
-    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.2/css/buttons.dataTables.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.7.1/css/buttons.dataTables.min.css">
     <link href="{{ asset('admin/assets/css/plugins.bundle.css') }}" rel="stylesheet" type="text/css">
     <link href="{{ asset('admin/assets/css/style.bundle.css') }}" rel="stylesheet" type="text/css">
     <link href="{{ asset('admin/assets/css/datatable-custom.css') }}" rel="stylesheet" type="text/css">
@@ -73,7 +73,7 @@
                         </div>
 
                         <div data-kt-menu-trigger="click"
-                             class="menu-item menu-accordion {{ request()->routeIs('products.*', 'categories.*', 'sub-categories.*', 'brands.*', 'manufacturers.*') ? 'hover show active' : '' }}">
+                             class="menu-item menu-accordion {{ request()->routeIs('products.*', 'categories.*', 'sub-categories.*', 'brands.*') ? 'hover show active' : '' }}">
                             <span class="menu-link">
                                 <span class="menu-icon">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
@@ -101,20 +101,6 @@
                                     </a>
                                 </div>
                                 @hasanyrole('super-admin|admin|manager')
-                                <div class="menu-item" style="margin-left: 20px;">
-                                    <a class="menu-link {{ request()->routeIs('products.create') ? 'active' : '' }}" href="{{ route('products.create') }}">
-                                        <span class="menu-bullet">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                                            <path d="M20 13.5v4.3a2 2 0 0 1-1.06 1.77l-6 3.2a2 2 0 0 1-1.88 0l-6-3.2A2 2 0 0 1 4 17.8v-7.1a2 2 0 0 1 1.06-1.77l6-3.2a2 2 0 0 1 1.88 0l1.56.83"/>
-                                            <path d="M4.3 9.8 12 14l4-2.18"/>
-                                            <path d="M12 14v8"/>
-                                            <path d="M18.5 2.5v6"/>
-                                            <path d="M15.5 5.5h6"/>
-                                            </svg>
-                                        </span>
-                                        <span class="menu-title">{{ __('New Product') }}</span>
-                                    </a>
-                                </div>
                                 <div class="menu-item" style="margin-left: 20px;">
                                     <a class="menu-link {{ request()->routeIs('categories.*') ? 'active' : '' }}" href="{{ route('categories.index') }}">
                                         <span class="menu-bullet">
@@ -148,18 +134,6 @@
                                             </svg>
                                         </span>
                                         <span class="menu-title">{{ __('Brands') }}</span>
-                                    </a>
-                                </div>
-                                <div class="menu-item" style="margin-left: 20px;">
-                                    <a class="menu-link {{ request()->routeIs('manufacturers.*') ? 'active' : '' }}" href="{{ route('manufacturers.index') }}">
-                                        <span class="menu-bullet">
-                                           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                                            <path d="M3 21V8l6 4V8l6 4V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v17"/>
-                                            <path d="M2 21h20"/>
-                                            <path d="M7 17h.01M12 17h.01M17 17h.01"/>
-                                            </svg>
-                                        </span>
-                                        <span class="menu-title">{{ __('Manufacturers') }}</span>
                                     </a>
                                 </div>
                                 @endhasanyrole
@@ -324,8 +298,10 @@
 <script src="{{ asset('admin/assets/js/plugins.bundle.js') }}"></script>
 <script src="{{ asset('admin/assets/js/scripts.bundle.js') }}"></script>
 <script src="{{ asset('admin/assets/plugins/custom/datatables/datatables.bundle.js') }}"></script>
-<script src="https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js"></script>
-<script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.colVis.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.0.0/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.0.0/js/buttons.html5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.0.0/js/buttons.print.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.0.0/js/buttons.colVis.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="https://cdn.jsdelivr.net/npm/toastr@2.1.4/build/toastr.min.js"></script>

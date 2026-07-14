@@ -78,3 +78,39 @@
 .dataTables_filter input {
   border: 1px solid #e4e6ef;
 }
+
+/* Column-visibility ("colvis") popup: force readable text —
+   without this it inherits white link text from elsewhere on the
+   page and renders invisible on the popup's white background. */
+.dt-button-collection {
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 0.475rem;
+  box-shadow: 0 0 50px 0 rgba(82, 63, 105, 0.15);
+  padding: 0.5rem 0;
+  min-width: 180px;
+}
+.dt-button-collection .dropdown-menu {
+  position: static !important;
+  display: block !important;
+  border: 0;
+  box-shadow: none;
+  padding: 0;
+}
+.dt-button-collection .dropdown-item,
+.dt-button-collection a.dt-button {
+  display: block;
+  width: 100%;
+  padding: 0.5rem 1.25rem;
+  color: #181c32 !important;
+  background-color: transparent;
+  text-decoration: none;
+}
+.dt-button-collection .dropdown-item:hover,
+.dt-button-collection a.dt-button:hover {
+  background-color: #f4f4f4;
+  color: #181c32 !important;
+}
+.dt-button-collection a.dt-button.active {
+  font-weight: 600;
+}

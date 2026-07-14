@@ -11,11 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('manufacturers', function (Blueprint $table) {
+        Schema::create('product_images', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->enum('type', ['own_factory', 'local_carpenter', 'outside_factory']);
-            $table->boolean('status')->default(true);
+            $table->foreignId('product_id')->constrained()->cascadeOnDelete();
+            $table->string('image_path');
+            $table->string('image_name');
+            $table->unsignedInteger('sort_order')->default(0);
             $table->timestamps();
         });
     }
@@ -25,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('manufacturers');
+        Schema::dropIfExists('product_images');
     }
 };

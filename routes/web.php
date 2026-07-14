@@ -7,7 +7,6 @@ use App\Http\Controllers\Auth\OtpVerificationController;
 use App\Http\Controllers\LocaleController;
 use App\Http\Controllers\Product\BrandController;
 use App\Http\Controllers\Product\CategoryController;
-use App\Http\Controllers\Product\ManufacturerController;
 use App\Http\Controllers\Product\ProductController;
 use App\Http\Controllers\Product\SubCategoryController;
 use App\Http\Controllers\ProfileController;
@@ -64,16 +63,21 @@ Route::middleware('auth')->group(function () {
         });
     });
 
-    // ── Products ───────────────────────────────────────────────
-    Route::get('products', [ProductController::class, 'index'])->name('products.index');
-    Route::get('products/data', [ProductController::class, 'Datatable'])->name('products.data');
+    // ── Products — Create/Edit are full pages; List/View/Delete/Toggle stay AJAX ──
+    Route::get('products', [ProductController::class, 'Index'])->name('products.index');
+    Route::get('products/datatable', [ProductController::class, 'Datatable'])->name('products.datatable');
 
     Route::middleware('role:super-admin|admin|manager')->group(function () {
-        Route::get('products/create', [ProductController::class, 'create'])->name('products.create');
-        Route::post('products', [ProductController::class, 'store'])->name('products.store');
-        Route::get('products/{product}/edit', [ProductController::class, 'edit'])->name('products.edit');
-        Route::put('products/{product}', [ProductController::class, 'update'])->name('products.update');
-        Route::delete('products/{product}', [ProductController::class, 'destroy'])->name('products.destroy');
+        Route::get('products/create', [ProductController::class, 'Create'])->name('products.create');
+        Route::post('products', [ProductController::class, 'Store'])->name('products.store');
+        Route::get('products/{product}/edit', [ProductController::class, 'Edit'])->name('products.edit');
+        Route::put('products/{product}', [ProductController::class, 'Update'])->name('products.update');
+
+        Route::prefix('products')->name('products.')->group(function () {
+            Route::post('{id}/delete', [ProductController::class, 'Delete'])->name('delete');
+            Route::post('{id}/toggle', [ProductController::class, 'ToggleStatus'])->name('toggle');
+            Route::post('{id}/images/{imageId}/delete', [ProductController::class, 'DeleteImage'])->name('images.delete');
+        });
 
         // Categories — AJAX modal pattern (list/add/edit/view/delete/toggle all via JSON)
         Route::prefix('categories')->name('categories.')->group(function () {
@@ -86,15 +90,28 @@ Route::middleware('auth')->group(function () {
             Route::post('{id}/toggle', [CategoryController::class, 'ToggleStatus'])->name('toggle');
         });
 
-        Route::get('sub-categories/data', [SubCategoryController::class, 'Datatable'])->name('sub-categories.data');
-        Route::resource('sub-categories', SubCategoryController::class)->except('show');
+        // Sub Categories — AJAX modal pattern (list/add/edit/view/delete/toggle all via JSON)
+        Route::prefix('sub-categories')->name('sub-categories.')->group(function () {
+            Route::get('/', [SubCategoryController::class, 'Index'])->name('index');
+            Route::get('datatable', [SubCategoryController::class, 'Datatable'])->name('datatable');
+            Route::post('/', [SubCategoryController::class, 'Store'])->name('store');
+            Route::get('{id}', [SubCategoryController::class, 'Show'])->name('show');
+            Route::post('{id}/update', [SubCategoryController::class, 'Update'])->name('update');
+            Route::post('{id}/delete', [SubCategoryController::class, 'Delete'])->name('delete');
+            Route::post('{id}/toggle', [SubCategoryController::class, 'ToggleStatus'])->name('toggle');
+        });
 
-        Route::get('brands/data', [BrandController::class, 'Datatable'])->name('brands.data');
-        Route::resource('brands', BrandController::class)->except('show');
-
-        Route::get('manufacturers/data', [ManufacturerController::class, 'Datatable'])->name('manufacturers.data');
-        Route::resource('manufacturers', ManufacturerController::class)->except('show');
+        // Brands — AJAX modal pattern (list/add/edit/view/delete/toggle all via JSON)
+        Route::prefix('brands')->name('brands.')->group(function () {
+            Route::get('/', [BrandController::class, 'Index'])->name('index');
+            Route::get('datatable', [BrandController::class, 'Datatable'])->name('datatable');
+            Route::post('/', [BrandController::class, 'Store'])->name('store');
+            Route::get('{id}', [BrandController::class, 'Show'])->name('show');
+            Route::post('{id}/update', [BrandController::class, 'Update'])->name('update');
+            Route::post('{id}/delete', [BrandController::class, 'Delete'])->name('delete');
+            Route::post('{id}/toggle', [BrandController::class, 'ToggleStatus'])->name('toggle');
+        });
     });
 
-    Route::get('products/{product}', [ProductController::class, 'show'])->name('products.show');
+    Route::get('products/{id}', [ProductController::class, 'Show'])->name('products.show');
 });

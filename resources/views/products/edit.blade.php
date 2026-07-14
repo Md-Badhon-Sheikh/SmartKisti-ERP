@@ -6,7 +6,7 @@
             </div>
         </div>
 
-        <form action="{{ route('products.update', $product) }}" method="POST">
+        <form action="{{ route('products.update', $product) }}" method="POST" enctype="multipart/form-data">
             @csrf
             @method('PUT')
             <div class="card-body border-top p-9">

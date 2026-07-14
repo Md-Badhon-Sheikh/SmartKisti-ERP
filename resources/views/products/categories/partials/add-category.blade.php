@@ -18,10 +18,12 @@
                     </div>
 
                     <div class="mb-5">
-                        <label class="form-label fw-bold d-block">{{ __('Brand Required') }}</label>
-                        <div class="form-check form-switch form-check-custom form-check-solid">
-                            <input class="form-check-input" type="checkbox" name="brand_required" id="brand_required" value="1" checked>
-                        </div>
+                        <label class="form-label required fw-bold d-block">{{ __('Brand Required') }}</label>
+                        <select name="brand_required" id="brand_required" class="form-select" required>
+                            <option value="1">{{ __('Yes') }}</option>
+                            <option value="0">{{ __('No') }}</option>
+                        </select>
+                        <div class="invalid-feedback" id="brand_required_error"></div>
                         <div class="form-text">{{ __('Turn this off for categories like Furniture, where products are made in-house and typically have no brand.') }}</div>
                     </div>
 
@@ -50,10 +52,15 @@ $(function () {
     const $title   = $('#categoryFormModalTitle');
     const $idInput = $('#category_id');
 
+    $('#brand_required').select2({
+        dropdownParent: $modal,
+        width: '100%',
+    });
+
     function resetForm() {
         $form[0].reset();
         $idInput.val('');
-        $('#brand_required').prop('checked', true);
+        $('#brand_required').val('1').trigger('change');
         $('#category_status').prop('checked', true);
         $('#category_status_row').hide();
         $form.find('.is-invalid').removeClass('is-invalid');
@@ -71,7 +78,7 @@ $(function () {
         $title.text('{{ __('Edit Category') }}');
         $idInput.val(data.id);
         $('#category_name').val(data.name);
-        $('#brand_required').prop('checked', !!data.brand_required);
+        $('#brand_required').val(data.brand_required ? '1' : '0').trigger('change');
         $('#category_status').prop('checked', !!data.status);
         $('#category_status_row').show();
         $modal.modal('show');

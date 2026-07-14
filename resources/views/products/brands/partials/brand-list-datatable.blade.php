@@ -1,11 +1,10 @@
 <!--begin::Table-->
-<table class="table erp-datatable align-middle table-bordered fs-6 gy-5 m-auto display responsive" id="categoryListDatatable">
+<table class="table erp-datatable align-middle table-bordered fs-6 gy-5 m-auto display responsive" id="brandListDatatable">
     <thead>
         <tr class="text-start text-muted fw-bolder fs-7 text-uppercase gs-0" style="background: #fff;">
             <th class="min-w-20px  fw-bold text-dark">{{ __('#') }}</th>
             <th class="min-w-120px fw-bold text-dark">{{ __('Name') }}</th>
             <th class="min-w-60px  fw-bold text-dark">{{ __('Products') }}</th>
-            <th class="min-w-60px  fw-bold text-dark">{{ __('Brand Required') }}</th>
             <th class="min-w-50px  fw-bold text-dark">{{ __('Status') }}</th>
             <th class="text-end min-w-30px fw-bold text-dark">{{ __('Action') }}</th>
         </tr>
@@ -19,13 +18,13 @@
 <script>
 $(document).ready(function () {
 
-    const BASE_URL = "{{ url('categories') }}";
+    const BASE_URL = "{{ url('brands') }}";
 
-    var table = $('#categoryListDatatable').DataTable({
+    var table = $('#brandListDatatable').DataTable({
         processing: true,
         serverSide: true,
         ajax: {
-            url:  "{{ route('categories.datatable') }}",
+            url:  "{{ route('brands.datatable') }}",
             type: 'GET'
         },
         columns: [
@@ -40,7 +39,6 @@ $(document).ready(function () {
             },
             { data: 'name',                 name: 'name' },
             { data: 'products_count_badge', name: 'products_count', orderable: false, searchable: false },
-            { data: 'brand_required_badge', name: 'brand_required', orderable: false, searchable: false },
             { data: 'status',               name: 'status',         orderable: false, searchable: false },
             { data: 'action',               name: 'action',         orderable: false, searchable: false, className: 'text-end' }
         ],
@@ -81,8 +79,8 @@ $(document).ready(function () {
             dataType: 'json',
 
             beforeSend: function () {
-                $('#categoryViewModal').modal('show');
-                $('#categoryViewModalBody').html(
+                $('#brandViewModal').modal('show');
+                $('#brandViewModalBody').html(
                     '<div class="d-flex justify-content-center py-5">' +
                     '<div class="spinner-border text-primary"></div>' +
                     '</div>'
@@ -94,11 +92,11 @@ $(document).ready(function () {
                     toastr.error('{{ __('Invalid response from server.') }}');
                     return;
                 }
-                window.renderCategoryViewModal(response.data);
+                window.renderBrandViewModal(response.data);
             },
 
             error: function (xhr) {
-                $('#categoryViewModalBody').html(
+                $('#brandViewModalBody').html(
                     '<div class="text-center text-danger py-5">' +
                     '<i class="fas fa-exclamation-circle fs-2 mb-3"></i>' +
                     '<p>{{ __('Failed to load data.') }}</p>' +
@@ -114,7 +112,7 @@ $(document).ready(function () {
 
         const id = $(this).data('id');
 
-        $('#categoryListDatatable tbody tr').removeClass('table-warning editing-row');
+        $('#brandListDatatable tbody tr').removeClass('table-warning editing-row');
         $(this).closest('tr').addClass('table-warning editing-row');
 
         $.ajax({
@@ -127,11 +125,11 @@ $(document).ready(function () {
                     toastr.error('{{ __('Invalid response from server.') }}');
                     return;
                 }
-                window.openCategoryEditModal(response.data);
+                window.openBrandEditModal(response.data);
             },
 
             error: function (xhr) {
-                toastr.error(xhr.responseJSON?.message || '{{ __('Failed to fetch category data.') }}');
+                toastr.error(xhr.responseJSON?.message || '{{ __('Failed to fetch brand data.') }}');
             }
         });
     });
@@ -148,7 +146,7 @@ $(document).ready(function () {
 
             success: function (res) {
                 toastr.success(res.message || "{{ __('Status updated.') }}");
-                $('#categoryListDatatable').DataTable().ajax.reload(null, false);
+                $('#brandListDatatable').DataTable().ajax.reload(null, false);
             },
 
             error: function (xhr) {
@@ -172,8 +170,8 @@ $(document).ready(function () {
                 headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
 
                 success: function (response) {
-                    toastr.success(response.message || '{{ __('Category deleted.') }}');
-                    $('#categoryListDatatable').DataTable().ajax.reload(null, false);
+                    toastr.success(response.message || '{{ __('Brand deleted.') }}');
+                    $('#brandListDatatable').DataTable().ajax.reload(null, false);
                 },
 
                 error: function (xhr) {

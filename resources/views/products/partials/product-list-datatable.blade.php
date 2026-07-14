@@ -1,11 +1,15 @@
 <!--begin::Table-->
-<table class="table erp-datatable align-middle table-bordered fs-6 gy-5 m-auto display responsive" id="categoryListDatatable">
+<table class="table erp-datatable align-middle table-bordered fs-6 gy-5 m-auto display responsive" id="productListDatatable">
     <thead>
         <tr class="text-start text-muted fw-bolder fs-7 text-uppercase gs-0" style="background: #fff;">
             <th class="min-w-20px  fw-bold text-dark">{{ __('#') }}</th>
             <th class="min-w-120px fw-bold text-dark">{{ __('Name') }}</th>
-            <th class="min-w-60px  fw-bold text-dark">{{ __('Products') }}</th>
-            <th class="min-w-60px  fw-bold text-dark">{{ __('Brand Required') }}</th>
+            <th class="min-w-100px fw-bold text-dark">{{ __('Category') }}</th>
+            <th class="min-w-100px fw-bold text-dark">{{ __('Sub Category') }}</th>
+            <th class="min-w-100px fw-bold text-dark">{{ __('Brand') }} / {{ __('Manufacturer') }}</th>
+            <th class="min-w-60px  fw-bold text-dark">{{ __('Type') }}</th>
+            <th class="min-w-80px  fw-bold text-dark">{{ __('Selling Price') }}</th>
+            <th class="min-w-50px  fw-bold text-dark">{{ __('Stock') }}</th>
             <th class="min-w-50px  fw-bold text-dark">{{ __('Status') }}</th>
             <th class="text-end min-w-30px fw-bold text-dark">{{ __('Action') }}</th>
         </tr>
@@ -19,13 +23,13 @@
 <script>
 $(document).ready(function () {
 
-    const BASE_URL = "{{ url('categories') }}";
+    const BASE_URL = "{{ url('products') }}";
 
-    var table = $('#categoryListDatatable').DataTable({
+    var table = $('#productListDatatable').DataTable({
         processing: true,
         serverSide: true,
         ajax: {
-            url:  "{{ route('categories.datatable') }}",
+            url:  "{{ route('products.datatable') }}",
             type: 'GET'
         },
         columns: [
@@ -38,11 +42,15 @@ $(document).ready(function () {
                     return meta.row + meta.settings._iDisplayStart + 1;
                 }
             },
-            { data: 'name',                 name: 'name' },
-            { data: 'products_count_badge', name: 'products_count', orderable: false, searchable: false },
-            { data: 'brand_required_badge', name: 'brand_required', orderable: false, searchable: false },
-            { data: 'status',               name: 'status',         orderable: false, searchable: false },
-            { data: 'action',               name: 'action',         orderable: false, searchable: false, className: 'text-end' }
+            { data: 'name',               name: 'name' },
+            { data: 'category',           name: 'category.name' },
+            { data: 'sub_category',       name: 'subCategory.name' },
+            { data: 'brand_manufacturer', name: 'brand.name',     orderable: false, searchable: false },
+            { data: 'type',               name: 'product_type' },
+            { data: 'selling_price',      name: 'selling_price' },
+            { data: 'stock',              name: 'stock' },
+            { data: 'status',             name: 'status',         orderable: false, searchable: false },
+            { data: 'action',             name: 'action',         orderable: false, searchable: false, className: 'text-end' }
         ],
         lengthMenu: [[10, 30, 50, -1], [10, 30, 50, "All"]],
         pageLength: 10,
@@ -81,8 +89,8 @@ $(document).ready(function () {
             dataType: 'json',
 
             beforeSend: function () {
-                $('#categoryViewModal').modal('show');
-                $('#categoryViewModalBody').html(
+                $('#productViewModal').modal('show');
+                $('#productViewModalBody').html(
                     '<div class="d-flex justify-content-center py-5">' +
                     '<div class="spinner-border text-primary"></div>' +
                     '</div>'
@@ -94,44 +102,16 @@ $(document).ready(function () {
                     toastr.error('{{ __('Invalid response from server.') }}');
                     return;
                 }
-                window.renderCategoryViewModal(response.data);
+                window.renderProductViewModal(response.data);
             },
 
             error: function (xhr) {
-                $('#categoryViewModalBody').html(
+                $('#productViewModalBody').html(
                     '<div class="text-center text-danger py-5">' +
                     '<i class="fas fa-exclamation-circle fs-2 mb-3"></i>' +
                     '<p>{{ __('Failed to load data.') }}</p>' +
                     '</div>'
                 );
-            }
-        });
-    });
-
-    // ── Edit ──────────────────────────────────────────────────
-    $(document).on('click', '.btn-edit', function (e) {
-        e.preventDefault();
-
-        const id = $(this).data('id');
-
-        $('#categoryListDatatable tbody tr').removeClass('table-warning editing-row');
-        $(this).closest('tr').addClass('table-warning editing-row');
-
-        $.ajax({
-            url:      BASE_URL + '/' + id,
-            type:     'GET',
-            dataType: 'json',
-
-            success: function (response) {
-                if (!response?.data) {
-                    toastr.error('{{ __('Invalid response from server.') }}');
-                    return;
-                }
-                window.openCategoryEditModal(response.data);
-            },
-
-            error: function (xhr) {
-                toastr.error(xhr.responseJSON?.message || '{{ __('Failed to fetch category data.') }}');
             }
         });
     });
@@ -148,7 +128,7 @@ $(document).ready(function () {
 
             success: function (res) {
                 toastr.success(res.message || "{{ __('Status updated.') }}");
-                $('#categoryListDatatable').DataTable().ajax.reload(null, false);
+                $('#productListDatatable').DataTable().ajax.reload(null, false);
             },
 
             error: function (xhr) {
@@ -172,8 +152,8 @@ $(document).ready(function () {
                 headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
 
                 success: function (response) {
-                    toastr.success(response.message || '{{ __('Category deleted.') }}');
-                    $('#categoryListDatatable').DataTable().ajax.reload(null, false);
+                    toastr.success(response.message || '{{ __('Product deleted.') }}');
+                    $('#productListDatatable').DataTable().ajax.reload(null, false);
                 },
 
                 error: function (xhr) {
