@@ -59,6 +59,11 @@ class Customer extends Model
         return $this->hasMany(InstallmentPlan::class);
     }
 
+    public function customOrders(): HasMany
+    {
+        return $this->hasMany(CustomOrder::class);
+    }
+
     public function createdBy(): BelongsTo
     {
         return $this->belongsTo(User::class, 'created_by');

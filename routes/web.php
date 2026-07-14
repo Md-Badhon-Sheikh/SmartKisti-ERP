@@ -6,6 +6,8 @@ use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\Auth\OtpVerificationController;
 use App\Http\Controllers\Customer\AreaController;
 use App\Http\Controllers\Customer\CustomerController;
+use App\Http\Controllers\CustomOrder\CustomOrderController;
+use App\Http\Controllers\DeliveryController;
 use App\Http\Controllers\Installment\InstallmentController;
 use App\Http\Controllers\LocaleController;
 use App\Http\Controllers\Product\BrandController;
@@ -173,4 +175,24 @@ Route::middleware('auth')->group(function () {
     Route::middleware('role:super-admin|admin|manager')->group(function () {
         Route::post('installments/{installmentPlan}/payments', [InstallmentController::class, 'StorePayment'])->name('installments.payments.store');
     });
+
+    // ── Custom Furniture Orders — Create/Edit are full pages; Show is a full detail page ──
+    Route::get('custom-orders', [CustomOrderController::class, 'Index'])->name('custom-orders.index');
+    Route::get('custom-orders/datatable', [CustomOrderController::class, 'Datatable'])->name('custom-orders.datatable');
+
+    Route::middleware('role:super-admin|admin|manager')->group(function () {
+        Route::get('custom-orders/create', [CustomOrderController::class, 'Create'])->name('custom-orders.create');
+        Route::post('custom-orders', [CustomOrderController::class, 'Store'])->name('custom-orders.store');
+        Route::get('custom-orders/{customOrder}/edit', [CustomOrderController::class, 'Edit'])->name('custom-orders.edit');
+        Route::put('custom-orders/{customOrder}', [CustomOrderController::class, 'Update'])->name('custom-orders.update');
+        Route::post('custom-orders/{id}/delete', [CustomOrderController::class, 'Delete'])->name('custom-orders.delete');
+        Route::post('custom-orders/{customOrder}/production-status', [CustomOrderController::class, 'AdvanceStatus'])->name('custom-orders.production-status.store');
+        Route::post('custom-orders/{customOrder}/deliveries', [DeliveryController::class, 'StoreForCustomOrder'])->name('custom-orders.deliveries.store');
+    });
+
+    Route::get('custom-orders/{customOrder}', [CustomOrderController::class, 'Show'])->name('custom-orders.show');
+
+    // ── Deliveries — audit list across Sales & Custom Orders ──
+    Route::get('deliveries', [DeliveryController::class, 'Index'])->name('deliveries.index');
+    Route::get('deliveries/datatable', [DeliveryController::class, 'Datatable'])->name('deliveries.datatable');
 });

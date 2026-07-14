@@ -113,6 +113,32 @@ class GlobalConstant
         return app()->getLocale() === 'bn' ? $paymentMethod['bn_name'] : $paymentMethod['en_name'];
     }
 
+    public const GLASS_TYPE = [
+        ['code' => 'clear', 'en_name' => 'Clear', 'bn_name' => 'স্বচ্ছ', 'status' => 1],
+        ['code' => 'frosted', 'en_name' => 'Frosted', 'bn_name' => 'ফ্রস্টেড', 'status' => 1],
+        ['code' => 'tinted', 'en_name' => 'Tinted', 'bn_name' => 'টিন্টেড', 'status' => 1],
+        ['code' => 'tempered', 'en_name' => 'Tempered', 'bn_name' => 'টেম্পার্ড', 'status' => 1],
+        ['code' => 'other', 'en_name' => 'Other', 'bn_name' => 'অন্যান্য', 'status' => 1],
+    ];
+
+    public static function activeGlassTypes()
+    {
+        return collect(self::GLASS_TYPE)
+            ->where('status', 1)
+            ->values();
+    }
+
+    public static function glassTypeName(?string $code): ?string
+    {
+        $glassType = collect(self::GLASS_TYPE)->firstWhere('code', $code);
+
+        if (! $glassType) {
+            return null;
+        }
+
+        return app()->getLocale() === 'bn' ? $glassType['bn_name'] : $glassType['en_name'];
+    }
+
     public static function getSymbolByCode(string $code): ?array
     {
         return collect(self::POLITICAL_SYMBOL)
