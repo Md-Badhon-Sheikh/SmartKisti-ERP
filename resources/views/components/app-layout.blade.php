@@ -102,6 +102,20 @@
                                 </div>
                                 @hasanyrole('super-admin|admin|manager')
                                 <div class="menu-item" style="margin-left: 20px;">
+                                    <a class="menu-link {{ request()->routeIs('products.create') ? 'active' : '' }}" href="{{ route('products.create') }}">
+                                        <span class="menu-bullet">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                            <rect x="3" y="12" width="8" height="8" rx="1"/>
+                                            <rect x="13" y="12" width="8" height="8" rx="1"/>
+                                            <rect x="8" y="4" width="8" height="8" rx="1" fill="none"/>
+                                            <path d="M17 7v6"/>
+                                            <path d="M14 10h6"/>
+                                            </svg>
+                                        </span>
+                                        <span class="menu-title">{{ __('New Product') }}</span>
+                                    </a>
+                                </div>
+                                <div class="menu-item" style="margin-left: 20px;">
                                     <a class="menu-link {{ request()->routeIs('categories.*') ? 'active' : '' }}" href="{{ route('categories.index') }}">
                                         <span class="menu-bullet">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
