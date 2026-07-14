@@ -22,7 +22,15 @@
                                 </div>
                             @endif
                         </div>
-                        <input type="file" name="avatar" accept=".png,.jpg,.jpeg" class="form-control form-control-solid">
+                        <div class="d-flex gap-2 mb-2">
+                            <button type="button" class="btn btn-sm btn-light-primary" id="btnUploadAvatar">
+                                <i class="fas fa-upload me-1"></i>{{ __('Upload') }}
+                            </button>
+                            <button type="button" class="btn btn-sm btn-light-info" id="btnCaptureAvatar">
+                                <i class="fas fa-camera me-1"></i>{{ __('Capture') }}
+                            </button>
+                        </div>
+                        <input type="file" name="avatar" id="avatar" accept=".png,.jpg,.jpeg" class="d-none">
                         @error('avatar')
                             <div class="text-danger fs-7 mt-1">{{ $message }}</div>
                         @enderror
@@ -83,4 +91,50 @@
             </div>
         </form>
     </div>
+
+    @include('components.camera-capture-modal')
+
+    @push('scripts')
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var $avatarInput = $('#avatar');
+            var $symbol      = $('.symbol.symbol-100px');
+
+            function setPreview(src) {
+                var $img = $symbol.find('img');
+                if (!$img.length) {
+                    $symbol.empty().append('<img src="' + src + '" class="rounded-circle" alt="">');
+                } else {
+                    $img.attr('src', src);
+                }
+            }
+
+            function setFileInput(input, file) {
+                var dataTransfer = new DataTransfer();
+                dataTransfer.items.add(file);
+                input.files = dataTransfer.files;
+            }
+
+            $('#btnUploadAvatar').on('click', function () {
+                $avatarInput.trigger('click');
+            });
+
+            $avatarInput.on('change', function () {
+                var file = this.files[0];
+                if (!file) return;
+
+                var reader = new FileReader();
+                reader.onload = function (e) { setPreview(e.target.result); };
+                reader.readAsDataURL(file);
+            });
+
+            $('#btnCaptureAvatar').on('click', function () {
+                CameraCapture.open(function (file, url) {
+                    setFileInput($avatarInput[0], file);
+                    setPreview(url);
+                });
+            });
+        });
+    </script>
+    @endpush
 </x-app-layout>

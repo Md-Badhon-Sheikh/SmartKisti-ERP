@@ -183,7 +183,15 @@
 
     <div class="col-md-4 mb-6">
         <label class="col-form-label fw-bold fs-6 d-block">{{ __('Images') }}</label>
-        <input type="file" name="images[]" id="images" class="form-control   form-control-solid" multiple accept="image/*">
+        <div class="d-flex gap-2 mb-2">
+            <button type="button" class="btn btn-sm btn-light-primary" id="btnUploadImages">
+                <i class="fas fa-upload me-1"></i>{{ __('Upload') }}
+            </button>
+            <button type="button" class="btn btn-sm btn-light-info" id="btnCaptureImage">
+                <i class="fas fa-camera me-1"></i>{{ __('Capture') }}
+            </button>
+        </div>
+        <input type="file" name="images[]" id="images" class="d-none" multiple accept="image/*">
         <div class="form-text">{{ __('You can select multiple images.') }}</div>
         @error('images')
             <div class="text-danger fs-7 mt-1">{{ $message }}</div>
@@ -213,6 +221,9 @@
         </div>
     @endif
 </div>
+
+@include('components.camera-capture-modal')
+
 @push('scripts')
 <script>
     document.addEventListener('DOMContentLoaded', function () {
@@ -280,25 +291,62 @@
         updateCategoryDependentFields();
         updateStockVisibility();
 
-        $('#images').on('change', function () {
-            var $container = $('#images_preview_container');
-            $container.find('.new-image-preview').remove();
-            var files = this.files;
+        (function () {
+            var pendingImages = [];
+            var $imagesInput  = $('#images');
+            var $container    = $('#images_preview_container');
 
-            for (var i = 0; i < files.length; i++) {
-                (function (file) {
+            function renderPending() {
+                $container.find('.new-image-preview').remove();
+
+                pendingImages.forEach(function (file, index) {
                     var reader = new FileReader();
                     reader.onload = function (e) {
                         $container.append(
-                            '<div class="position-relative new-image-preview">' +
+                            '<div class="position-relative new-image-preview" data-index="' + index + '">' +
                             '<img src="' + e.target.result + '" style="width:80px;height:80px;object-fit:cover;border-radius:6px;border:1px solid #e4e6ef;">' +
+                            '<button type="button" class="btn btn-sm btn-icon btn-light-danger btn-remove-pending-image position-absolute top-0 start-100 translate-middle rounded-circle" data-index="' + index + '" style="width:22px;height:22px;">' +
+                            '<i class="fas fa-times fs-8"></i></button>' +
                             '</div>'
                         );
                     };
                     reader.readAsDataURL(file);
-                })(files[i]);
+                });
             }
-        });
+
+            function syncInput() {
+                var dataTransfer = new DataTransfer();
+                pendingImages.forEach(function (file) { dataTransfer.items.add(file); });
+                $imagesInput[0].files = dataTransfer.files;
+            }
+
+            $('#btnUploadImages').on('click', function () {
+                $imagesInput.trigger('click');
+            });
+
+            $imagesInput.on('change', function () {
+                Array.prototype.forEach.call(this.files, function (file) {
+                    pendingImages.push(file);
+                });
+                syncInput();
+                renderPending();
+            });
+
+            $('#btnCaptureImage').on('click', function () {
+                CameraCapture.open(function (file) {
+                    pendingImages.push(file);
+                    syncInput();
+                    renderPending();
+                });
+            });
+
+            $(document).on('click', '.btn-remove-pending-image', function () {
+                var index = $(this).data('index');
+                pendingImages.splice(index, 1);
+                syncInput();
+                renderPending();
+            });
+        })();
 
         $(document).on('click', '.btn-delete-existing-image', function () {
             var imageId = $(this).data('image-id');

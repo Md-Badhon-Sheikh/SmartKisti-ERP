@@ -9,7 +9,37 @@
         'address'   => $g->address,
         'photo_url' => $g->photo ? asset($g->photo) : null,
     ]) : collect();
+    $photoPlaceholder = "data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23b5b5c3'%3E%3Ccircle cx='12' cy='8' r='4'/%3E%3Cpath d='M4 20c0-4 3.5-7 8-7s8 3 8 7'/%3E%3C/svg%3E";
 @endphp
+
+<div class="d-flex flex-column align-items-center mb-8">
+    <div class="position-relative" style="width:130px;height:130px;">
+        <img id="customer_photo_preview"
+             src="{{ $customer && $customer->photo ? asset($customer->photo) : $photoPlaceholder }}"
+             style="width:130px;height:130px;object-fit:cover;border-radius:50%;border:2px solid #e4e6ef;background:#f5f5f5;">
+    </div>
+
+    <div class="d-flex gap-2 mt-3">
+        <button type="button" class="btn btn-sm btn-light-primary" id="btnUploadPhoto">
+            <i class="fas fa-upload me-1"></i>{{ __('Upload') }}
+        </button>
+        <button type="button" class="btn btn-sm btn-light-info" id="btnCapturePhoto">
+            <i class="fas fa-camera me-1"></i>{{ __('Capture') }}
+        </button>
+    </div>
+
+    @if ($customer && $customer->photo)
+        <div class="form-check mt-2">
+            <input class="form-check-input" type="checkbox" name="remove_photo" id="remove_photo" value="1">
+            <label class="form-check-label fs-8" for="remove_photo">{{ __('Remove current photo') }}</label>
+        </div>
+    @endif
+
+    <input type="file" name="photo" id="photo" class="d-none" accept="image/*">
+    @error('photo')
+        <div class="text-danger fs-7 mt-1">{{ $message }}</div>
+    @enderror
+</div>
 
 <div class="row">
     @if ($customer)
@@ -104,34 +134,29 @@
     </div>
 
     <div class="col-md-4 mb-6">
-        <label class="col-form-label fw-bold fs-6 d-block">{{ __('Photo') }}</label>
-        @if ($customer && $customer->photo)
-            <div class="mb-2">
-                <img src="{{ asset($customer->photo) }}" style="width:80px;height:80px;object-fit:cover;border-radius:6px;border:1px solid #e4e6ef;">
-                <div class="form-check mt-1">
-                    <input class="form-check-input" type="checkbox" name="remove_photo" id="remove_photo" value="1">
-                    <label class="form-check-label fs-8" for="remove_photo">{{ __('Remove current photo') }}</label>
-                </div>
-            </div>
-        @endif
-        <input type="file" name="photo" id="photo" class="form-control form-control-solid" accept="image/*">
-        @error('photo')
-            <div class="text-danger fs-7 mt-1">{{ $message }}</div>
-        @enderror
-    </div>
-
-    <div class="col-md-4 mb-6">
         <label class="col-form-label fw-bold fs-6 d-block">{{ __('NID Image') }}</label>
-        @if ($customer && $customer->nid_image)
-            <div class="mb-2">
-                <img src="{{ asset($customer->nid_image) }}" style="width:80px;height:80px;object-fit:cover;border-radius:6px;border:1px solid #e4e6ef;">
-                <div class="form-check mt-1">
-                    <input class="form-check-input" type="checkbox" name="remove_nid_image" id="remove_nid_image" value="1">
-                    <label class="form-check-label fs-8" for="remove_nid_image">{{ __('Remove current NID image') }}</label>
+        <div class="d-flex align-items-center gap-3 mb-2">
+            <img id="nid_image_preview"
+                 src="{{ $customer && $customer->nid_image ? asset($customer->nid_image) : $photoPlaceholder }}"
+                 style="width:70px;height:70px;object-fit:cover;border-radius:6px;border:1px solid #e4e6ef;background:#f5f5f5;">
+            <div class="d-flex flex-column gap-2">
+                <div class="d-flex gap-2">
+                    <button type="button" class="btn btn-sm btn-light-primary" id="btnUploadNidImage">
+                        <i class="fas fa-upload me-1"></i>{{ __('Upload') }}
+                    </button>
+                    <button type="button" class="btn btn-sm btn-light-info" id="btnCaptureNidImage">
+                        <i class="fas fa-camera me-1"></i>{{ __('Capture') }}
+                    </button>
                 </div>
+                @if ($customer && $customer->nid_image)
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="remove_nid_image" id="remove_nid_image" value="1">
+                        <label class="form-check-label fs-8" for="remove_nid_image">{{ __('Remove current NID image') }}</label>
+                    </div>
+                @endif
             </div>
-        @endif
-        <input type="file" name="nid_image" id="nid_image" class="form-control form-control-solid" accept="image/*">
+        </div>
+        <input type="file" name="nid_image" id="nid_image" class="d-none" accept="image/*">
         @error('nid_image')
             <div class="text-danger fs-7 mt-1">{{ $message }}</div>
         @enderror
@@ -139,11 +164,20 @@
 
     <div class="col-md-4 mb-6">
         <label class="col-form-label fw-bold fs-6 d-block">{{ __('Other Documents') }}</label>
-        <input type="file" name="other_documents[]" id="other_documents" class="form-control form-control-solid" multiple>
+        <div class="d-flex gap-2 mb-2">
+            <button type="button" class="btn btn-sm btn-light-primary" id="btnUploadDocuments">
+                <i class="fas fa-upload me-1"></i>{{ __('Upload') }}
+            </button>
+            <button type="button" class="btn btn-sm btn-light-info" id="btnCaptureDocument">
+                <i class="fas fa-camera me-1"></i>{{ __('Capture') }}
+            </button>
+        </div>
+        <input type="file" name="other_documents[]" id="other_documents" class="d-none" multiple>
         <div class="form-text">{{ __('You can attach multiple documents (PDF, images, etc).') }}</div>
         @error('other_documents')
             <div class="text-danger fs-7 mt-1">{{ $message }}</div>
         @enderror
+        <div id="new_documents_preview" class="d-flex flex-column gap-2 mt-2"></div>
         <div id="documents_list_container" class="d-flex flex-column gap-2 mt-3">
             @if ($customer && $customer->documents->count())
                 @foreach ($customer->documents as $document)
@@ -180,6 +214,8 @@
     <div id="removed_guarantor_ids_container"></div>
 </div>
 
+@include('components.camera-capture-modal')
+
 @push('scripts')
 <script>
     document.addEventListener('DOMContentLoaded', function () {
@@ -187,8 +223,129 @@
         $('#gender').select2({ width: '100%' });
         $('#status').select2({ width: '100%' });
 
+        function setFileInput(input, file) {
+            var dataTransfer = new DataTransfer();
+            dataTransfer.items.add(file);
+            input.files = dataTransfer.files;
+        }
+
+        (function () {
+            var $photoInput   = $('#photo');
+            var $photoPreview = $('#customer_photo_preview');
+            var $removePhoto  = $('#remove_photo');
+
+            $('#btnUploadPhoto').on('click', function () {
+                $photoInput.trigger('click');
+            });
+
+            $photoInput.on('change', function () {
+                var file = this.files[0];
+                if (!file) return;
+
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    $photoPreview.attr('src', e.target.result);
+                };
+                reader.readAsDataURL(file);
+
+                if ($removePhoto.length) $removePhoto.prop('checked', false);
+            });
+
+            $('#btnCapturePhoto').on('click', function () {
+                CameraCapture.open(function (file, url) {
+                    setFileInput($photoInput[0], file);
+                    $photoPreview.attr('src', url);
+                    if ($removePhoto.length) $removePhoto.prop('checked', false);
+                });
+            });
+        })();
+
+        (function () {
+            var $nidInput   = $('#nid_image');
+            var $nidPreview = $('#nid_image_preview');
+            var $removeNid  = $('#remove_nid_image');
+
+            $('#btnUploadNidImage').on('click', function () {
+                $nidInput.trigger('click');
+            });
+
+            $nidInput.on('change', function () {
+                var file = this.files[0];
+                if (!file) return;
+
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    $nidPreview.attr('src', e.target.result);
+                };
+                reader.readAsDataURL(file);
+
+                if ($removeNid.length) $removeNid.prop('checked', false);
+            });
+
+            $('#btnCaptureNidImage').on('click', function () {
+                CameraCapture.open(function (file, url) {
+                    setFileInput($nidInput[0], file);
+                    $nidPreview.attr('src', url);
+                    if ($removeNid.length) $removeNid.prop('checked', false);
+                });
+            });
+        })();
+
+        (function () {
+            var pendingDocuments = [];
+            var $documentsInput  = $('#other_documents');
+            var $preview         = $('#new_documents_preview');
+
+            function renderPreview() {
+                $preview.empty();
+                pendingDocuments.forEach(function (file, index) {
+                    $preview.append(
+                        '<div class="d-flex align-items-center gap-2 pending-document">' +
+                        '<i class="fas fa-paperclip me-1"></i><span>' + $('<div>').text(file.name).html() + '</span>' +
+                        '<button type="button" class="btn btn-sm btn-icon btn-light-danger btn-remove-pending-document" data-index="' + index + '" style="width:22px;height:22px;">' +
+                        '<i class="fas fa-times fs-8"></i></button>' +
+                        '</div>'
+                    );
+                });
+            }
+
+            function syncInput() {
+                var dataTransfer = new DataTransfer();
+                pendingDocuments.forEach(function (file) { dataTransfer.items.add(file); });
+                $documentsInput[0].files = dataTransfer.files;
+            }
+
+            $('#btnUploadDocuments').on('click', function () {
+                $documentsInput.trigger('click');
+            });
+
+            $documentsInput.on('change', function () {
+                Array.prototype.forEach.call(this.files, function (file) {
+                    pendingDocuments.push(file);
+                });
+                syncInput();
+                renderPreview();
+            });
+
+            $('#btnCaptureDocument').on('click', function () {
+                CameraCapture.open(function (file) {
+                    pendingDocuments.push(file);
+                    syncInput();
+                    renderPreview();
+                });
+            });
+
+            $(document).on('click', '.btn-remove-pending-document', function () {
+                var index = $(this).data('index');
+                pendingDocuments.splice(index, 1);
+                syncInput();
+                renderPreview();
+            });
+        })();
+
         var guarantorIndex = 0;
         var existingGuarantors = @json($existingGuarantors);
+        var photoPlaceholder = @json($photoPlaceholder);
 
         function escAttr(value) {
             return String(value ?? '')
@@ -201,9 +358,7 @@
         function buildGuarantorRow(index, data) {
             data = data || {};
 
-            var photoPreview = data.photo_url
-                ? '<img src="' + data.photo_url + '" style="width:60px;height:60px;object-fit:cover;border-radius:6px;border:1px solid #e4e6ef;">'
-                : '';
+            var photoSrc = data.photo_url || photoPlaceholder;
 
             return ''
                 + '<div class="border rounded p-4 mb-3 guarantor-row" data-index="' + index + '">'
@@ -232,8 +387,10 @@
                 +     '<div class="col-md-4 mb-3">'
                 +       '<label class="form-label fw-bold d-block">{{ __('Photo') }}</label>'
                 +       '<div class="d-flex align-items-center gap-2">'
-                +         photoPreview
-                +         '<input type="file" name="guarantors[' + index + '][photo]" class="form-control" accept="image/*">'
+                +         '<img class="guarantor-photo-preview" src="' + photoSrc + '" style="width:50px;height:50px;object-fit:cover;border-radius:6px;border:1px solid #e4e6ef;background:#f5f5f5;">'
+                +         '<button type="button" class="btn btn-sm btn-light-primary btn-guarantor-upload"><i class="fas fa-upload"></i></button>'
+                +         '<button type="button" class="btn btn-sm btn-light-info btn-guarantor-capture"><i class="fas fa-camera"></i></button>'
+                +         '<input type="file" name="guarantors[' + index + '][photo]" class="d-none guarantor-photo-input" accept="image/*">'
                 +       '</div>'
                 +     '</div>'
                 +     '<div class="col-md-2 mb-3 d-flex align-items-end">'
@@ -251,6 +408,31 @@
 
         $('#addGuarantorRow').on('click', function () {
             $('#guarantors_container').append(buildGuarantorRow(guarantorIndex++));
+        });
+
+        $(document).on('click', '.btn-guarantor-upload', function () {
+            $(this).closest('.guarantor-row').find('.guarantor-photo-input').trigger('click');
+        });
+
+        $(document).on('change', '.guarantor-photo-input', function () {
+            var file = this.files[0];
+            if (!file) return;
+
+            var $preview = $(this).closest('.guarantor-row').find('.guarantor-photo-preview');
+            var reader = new FileReader();
+            reader.onload = function (e) { $preview.attr('src', e.target.result); };
+            reader.readAsDataURL(file);
+        });
+
+        $(document).on('click', '.btn-guarantor-capture', function () {
+            var $row     = $(this).closest('.guarantor-row');
+            var $input   = $row.find('.guarantor-photo-input');
+            var $preview = $row.find('.guarantor-photo-preview');
+
+            CameraCapture.open(function (file, url) {
+                setFileInput($input[0], file);
+                $preview.attr('src', url);
+            });
         });
 
         $(document).on('click', '.remove-guarantor-row', function () {

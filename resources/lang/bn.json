@@ -151,6 +151,7 @@
     "Images": "ছবি",
     "You can select multiple images.": "আপনি একাধিক ছবি নির্বাচন করতে পারেন।",
 
+    "#": "#",
     "Back": "ফিরে যান",
     "Close": "বন্ধ করুন",
     "Created At": "তৈরির তারিখ",
@@ -230,5 +231,11 @@
     "e.g. 01812345678": "যেমন: ০১৮১২৩৪৫৬৭৮",
     "e.g. 10": "যেমন: ১০",
     "e.g. Business": "যেমন: ব্যবসা",
-    "NID": "এনআইডি"
+    "NID": "এনআইডি",
+    "Upload": "আপলোড",
+    "Capture": "ক্যাপচার",
+    "Capture Photo": "ছবি ক্যাপচার করুন",
+    "Take Photo": "ছবি তুলুন",
+    "Camera is not supported on this device/browser.": "এই ডিভাইস/ব্রাউজারে ক্যামেরা সাপোর্ট করে না।",
+    "Unable to access camera.": "ক্যামেরা অ্যাক্সেস করা যায়নি।"
 }
