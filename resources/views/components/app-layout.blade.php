@@ -91,11 +91,11 @@
                                     <a class="menu-link {{ request()->routeIs('products.index') ? 'active' : '' }}" href="{{ route('products.index') }}">
                                         <span class="menu-bullet">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-  <rect x="3" y="12" width="8" height="8" rx="1"/>
-  <rect x="13" y="12" width="8" height="8" rx="1"/>
-  <rect x="8" y="4" width="8" height="8" rx="1" fill="none"/>
-  <path d="M12 4v3M7 12v3M17 12v3"/>
-</svg>
+                                            <rect x="3" y="12" width="8" height="8" rx="1"/>
+                                            <rect x="13" y="12" width="8" height="8" rx="1"/>
+                                            <rect x="8" y="4" width="8" height="8" rx="1" fill="none"/>
+                                            <path d="M12 4v3M7 12v3M17 12v3"/>
+                                            </svg>
                                         </span>
                                         <span class="menu-title">{{ __('All Products') }}</span>
                                     </a>
