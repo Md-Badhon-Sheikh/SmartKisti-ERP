@@ -326,6 +326,20 @@
                             </div>
                         </div>
 
+                        @hasanyrole('super-admin|admin|manager')
+                        <div class="menu-item">
+                            <a class="menu-link {{ request()->routeIs('sms-logs.*') ? 'active' : '' }}" href="{{ route('sms-logs.index') }}">
+                                <span class="menu-icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M4 4h16v12H7l-3 3V4z"/>
+                                    <path d="M8 9h8M8 12h5"/>
+                                    </svg>
+                                </span>
+                                <span class="menu-title">{{ __('SMS Logs') }}</span>
+                            </a>
+                        </div>
+                        @endhasanyrole
+
                         @hasanyrole('super-admin|admin')
                         <div data-kt-menu-trigger="click"
                              class="menu-item menu-accordion {{ request()->routeIs('users.*') ? 'hover show active' : '' }}">

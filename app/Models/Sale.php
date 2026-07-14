@@ -60,6 +60,11 @@ class Sale extends Model
         return $this->hasMany(Delivery::class);
     }
 
+    public function smsLogs(): HasMany
+    {
+        return $this->hasMany(SmsLog::class);
+    }
+
     public function createdBy(): BelongsTo
     {
         return $this->belongsTo(User::class, 'created_by');

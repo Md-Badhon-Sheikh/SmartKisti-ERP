@@ -8,6 +8,7 @@ use App\Models\InstallmentPlan;
 use App\Models\Product;
 use App\Models\Sale;
 use App\Models\SaleItem;
+use App\Services\Sms\SmsLogService;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
@@ -19,6 +20,8 @@ use Yajra\DataTables\Facades\DataTables;
 
 class SaleController extends Controller
 {
+    public function __construct(private readonly SmsLogService $smsLog) {}
+
     /**
      * Display the index page.
      */
@@ -95,11 +98,11 @@ class SaleController extends Controller
     {
         $validated = $this->validateSale($request);
 
-        DB::transaction(function () use ($request, $validated) {
-            $sale = $this->persistSale($request, $validated);
-
-            return $sale;
+        $sale = DB::transaction(function () use ($request, $validated) {
+            return $this->persistSale($request, $validated);
         });
+
+        $this->sendInvoiceSms($sale->load('customer'));
 
         return redirect()->route('sales.index')->with('status', __('Sale created successfully.'));
     }
@@ -204,6 +207,30 @@ class SaleController extends Controller
     protected function hasRecordedPayments(Sale $sale): bool
     {
         return $sale->installmentPlan()->whereHas('payments')->exists();
+    }
+
+    /**
+     * Send (and log) the invoice-generated SMS for a newly created Sale.
+     */
+    protected function sendInvoiceSms(Sale $sale): void
+    {
+        if (! $sale->customer->mobile) {
+            return;
+        }
+
+        $message = sprintf(
+            'প্রিয় %s, আপনার ইনভয়েস %s তৈরি হয়েছে। সর্বমোট: ৳%s, পরিশোধিত: ৳%s, বাকি: ৳%s। ধন্যবাদ - SmartKisti ERP',
+            $sale->customer->name,
+            $sale->invoice_no,
+            number_format($sale->grand_total, 2),
+            number_format($sale->paid_amount, 2),
+            number_format($sale->due_amount, 2),
+        );
+
+        $this->smsLog->send($sale->customer->mobile, $message, 'sale', [
+            'customer_id' => $sale->customer_id,
+            'sale_id' => $sale->id,
+        ]);
     }
 
     /**

@@ -357,5 +357,11 @@
     "Receiver Mobile": "গ্রহীতার মোবাইল",
     "Signature": "স্বাক্ষর",
     "Record Delivery": "ডেলিভারি রেকর্ড করুন",
-    "Delivery recorded successfully.": "ডেলিভারি সফলভাবে রেকর্ড হয়েছে।"
+    "Delivery recorded successfully.": "ডেলিভারি সফলভাবে রেকর্ড হয়েছে।",
+
+    "SMS Logs": "এসএমএস লগ",
+    "Message": "মেসেজ",
+    "Sent At": "পাঠানোর সময়",
+    "Order": "অর্ডার",
+    "Sent": "পাঠানো হয়েছে"
 }

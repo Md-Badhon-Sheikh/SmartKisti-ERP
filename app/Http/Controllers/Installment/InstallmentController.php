@@ -6,6 +6,7 @@ use App\Enums\GlobalConstant;
 use App\Http\Controllers\Controller;
 use App\Models\InstallmentPayment;
 use App\Models\InstallmentPlan;
+use App\Services\Sms\SmsLogService;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
@@ -16,6 +17,8 @@ use Yajra\DataTables\Facades\DataTables;
 
 class InstallmentController extends Controller
 {
+    public function __construct(private readonly SmsLogService $smsLog) {}
+
     /**
      * Display the index page.
      */
@@ -93,7 +96,7 @@ class InstallmentController extends Controller
 
         $nextInstallmentNo = ($installmentPlan->payments()->max('installment_no') ?? 0) + 1;
 
-        InstallmentPayment::create([
+        $payment = InstallmentPayment::create([
             'installment_plan_id' => $installmentPlan->id,
             'sale_id' => $installmentPlan->sale_id,
             'customer_id' => $installmentPlan->customer_id,
@@ -127,7 +130,36 @@ class InstallmentController extends Controller
             'status' => $isCompleted ? 'completed' : $sale->status,
         ]);
 
+        $this->sendPaymentSms($payment->fresh('customer'), $remainingDue);
+
         return redirect()->route('installments.show', $installmentPlan->id)->with('status', __('Payment recorded successfully.'));
+    }
+
+    /**
+     * Send (and log) the payment-received SMS for a newly recorded InstallmentPayment.
+     */
+    protected function sendPaymentSms(InstallmentPayment $payment, float $remainingDue): void
+    {
+        if (! $payment->customer->mobile) {
+            return;
+        }
+
+        $message = sprintf(
+            'প্রিয় %s, আপনার কিস্তি #%d এর ৳%s পরিশোধ সফলভাবে গ্রহণ করা হয়েছে। অবশিষ্ট বাকি: ৳%s। রিসিট: %s - SmartKisti ERP',
+            $payment->customer->name,
+            $payment->installment_no,
+            number_format($payment->amount, 2),
+            number_format($remainingDue, 2),
+            $payment->receipt_no,
+        );
+
+        $log = $this->smsLog->send($payment->customer->mobile, $message, 'installment', [
+            'customer_id' => $payment->customer_id,
+            'sale_id' => $payment->sale_id,
+            'installment_payment_id' => $payment->id,
+        ]);
+
+        $payment->update(['sms_sent' => $log->status === 'sent']);
     }
 
     /**

@@ -16,6 +16,7 @@ use App\Http\Controllers\Product\ProductController;
 use App\Http\Controllers\Product\SubCategoryController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Sale\SaleController;
+use App\Http\Controllers\SmsLogController;
 use App\Http\Controllers\UserManagementController;
 use Illuminate\Support\Facades\Route;
 
@@ -195,4 +196,10 @@ Route::middleware('auth')->group(function () {
     // ── Deliveries — audit list across Sales & Custom Orders ──
     Route::get('deliveries', [DeliveryController::class, 'Index'])->name('deliveries.index');
     Route::get('deliveries/datatable', [DeliveryController::class, 'Datatable'])->name('deliveries.datatable');
+
+    // ── SMS Logs — read-only audit list; SMS is never stored only inside business tables ──
+    Route::middleware('role:super-admin|admin|manager')->group(function () {
+        Route::get('sms-logs', [SmsLogController::class, 'Index'])->name('sms-logs.index');
+        Route::get('sms-logs/datatable', [SmsLogController::class, 'Datatable'])->name('sms-logs.datatable');
+    });
 });

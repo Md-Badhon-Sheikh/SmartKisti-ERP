@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Enums\GlobalConstant;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class InstallmentPayment extends Model
 {
@@ -55,5 +56,10 @@ class InstallmentPayment extends Model
     public function paymentMethodName(): ?string
     {
         return GlobalConstant::paymentMethodName($this->payment_method);
+    }
+
+    public function smsLogs(): HasMany
+    {
+        return $this->hasMany(SmsLog::class);
     }
 }
