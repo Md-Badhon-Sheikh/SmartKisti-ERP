@@ -49,16 +49,13 @@
 
     <div class="col-md-4 mb-6">
         <label class="col-form-label required fw-bold fs-6">{{ __('Ready or Custom Product') }}</label>
-        <div class="d-flex align-items-center gap-6">
-            <div class="form-check form-check-custom form-check-solid">
-                <input type="radio" name="product_type" id="product-type-ready" value="ready" class="form-check-input" @checked(old('product_type', $product?->product_type ?? 'ready') === 'ready')>
-                <label class="form-check-label" for="product-type-ready">{{ __('Ready Product') }}</label>
-            </div>
-            <div class="form-check form-check-custom form-check-solid">
-                <input type="radio" name="product_type" id="product-type-custom" value="custom" class="form-check-input" @checked(old('product_type', $product?->product_type) === 'custom')>
-                <label class="form-check-label" for="product-type-custom">{{ __('Custom Product') }}</label>
-            </div>
-        </div>
+        <select name="product_type" id="product_type" class="form-select form-select-solid  " required>
+            <option value="ready" @selected(old('product_type', $product?->product_type ?? 'ready') === 'ready')>{{ __('Ready Product') }}</option>
+            <option value="custom" @selected(old('product_type', $product?->product_type) === 'custom')>{{ __('Custom Product') }}</option>
+        </select>
+        @error('product_type')
+            <div class="text-danger fs-7 mt-1">{{ $message }}</div>
+        @enderror
     </div>
 
     <div class="col-md-4 mb-6 stock-section">
@@ -259,6 +256,7 @@
         $('#size').select2({ width: '100%' });
         $('#polish').select2({ width: '100%' });
         $('#status').select2({ width: '100%' });
+        $('#product_type').select2({ width: '100%' });
 
         function updateCategoryDependentFields() {
             var selected = categorySelect.options[categorySelect.selectedIndex];
@@ -272,14 +270,12 @@
         }
 
         function updateStockVisibility() {
-            var checked = document.querySelector('[name="product_type"]:checked');
-            stockSection.style.display = (checked && checked.value === 'ready') ? '' : 'none';
+            var productTypeSelect = document.getElementById('product_type');
+            stockSection.style.display = (productTypeSelect && productTypeSelect.value === 'ready') ? '' : 'none';
         }
 
         $(categorySelect).on('change', updateCategoryDependentFields);
-        document.querySelectorAll('[name="product_type"]').forEach(function (radio) {
-            radio.addEventListener('change', updateStockVisibility);
-        });
+        $('#product_type').on('change', updateStockVisibility);
 
         updateCategoryDependentFields();
         updateStockVisibility();
