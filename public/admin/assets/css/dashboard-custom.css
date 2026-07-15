@@ -1,0 +1,70 @@
+/* Dashboard — small structural additions layered on top of the existing
+   Metronic/Bootstrap utility classes (badge-light-*, symbol, card, progress). */
+
+.sk-kpi-card {
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.sk-kpi-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.08) !important;
+}
+
+.sk-kpi-value {
+  font-size: 1.65rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.sk-alert-pill {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 0.9rem;
+  border-left-width: 3px !important;
+  border-left-style: solid !important;
+  border-radius: 0.475rem;
+}
+
+.sk-rail-item {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.5rem 0.4rem;
+  border-radius: 0.475rem;
+}
+.sk-rail-item:hover {
+  background-color: #f9f9f9;
+}
+.sk-rail-item .sk-rail-text {
+  min-width: 0;
+  flex: 1;
+}
+.sk-rail-item .sk-rail-text .name {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #181c32;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.sk-rail-item .sk-rail-text .meta {
+  font-size: 0.75rem;
+  color: #a1a5b7;
+}
+
+.sk-rail-group-title {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin: 0.9rem 0 0.5rem;
+}
+
+.sk-chart-canvas {
+  max-height: 260px;
+}
+
+.sk-quick-action {
+  border-radius: 2rem !important;
+  white-space: nowrap;
+}

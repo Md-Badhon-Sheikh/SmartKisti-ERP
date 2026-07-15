@@ -18,6 +18,7 @@
     <link href="{{ asset('admin/assets/css/plugins.bundle.css') }}" rel="stylesheet" type="text/css">
     <link href="{{ asset('admin/assets/css/style.bundle.css') }}" rel="stylesheet" type="text/css">
     <link href="{{ asset('admin/assets/css/datatable-custom.css') }}" rel="stylesheet" type="text/css">
+    <link href="{{ asset('admin/assets/css/dashboard-custom.css') }}" rel="stylesheet" type="text/css">
 </head>
 <body id="kt_body" class="header-fixed header-tablet-and-mobile-fixed toolbar-enabled aside-enabled aside-fixed">
 <div class="d-flex flex-column flex-root">

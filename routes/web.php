@@ -7,6 +7,7 @@ use App\Http\Controllers\Auth\OtpVerificationController;
 use App\Http\Controllers\Customer\AreaController;
 use App\Http\Controllers\Customer\CustomerController;
 use App\Http\Controllers\CustomOrder\CustomOrderController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DeliveryController;
 use App\Http\Controllers\Installment\InstallmentController;
 use App\Http\Controllers\LocaleController;
@@ -48,7 +49,7 @@ Route::middleware('guest')->group(function () {
 Route::middleware('auth')->group(function () {
     Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
 
-    Route::view('dashboard', 'dashboard')->name('dashboard');
+    Route::get('dashboard', [DashboardController::class, 'Index'])->name('dashboard');
 
     Route::get('profile', [ProfileController::class, 'show'])->name('profile.show');
     Route::get('profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
