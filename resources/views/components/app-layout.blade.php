@@ -210,7 +210,7 @@
                         </div>
 
                         <div data-kt-menu-trigger="click"
-                             class="menu-item menu-accordion {{ request()->routeIs('sales.*', 'installments.*') ? 'hover show active' : '' }}">
+                             class="menu-item menu-accordion {{ request()->routeIs('sales.*', 'installments.*', 'sales-report.*') ? 'hover show active' : '' }}">
                             <span class="menu-link">
                                 <span class="menu-icon">
                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
@@ -264,6 +264,19 @@
                                         <span class="menu-title">{{ __('Installment Plans') }}</span>
                                     </a>
                                 </div>
+                                @hasanyrole('super-admin|admin|manager')
+                                <div class="menu-item" style="margin-left: 20px;">
+                                    <a class="menu-link {{ request()->routeIs('sales-report.*') ? 'active' : '' }}" href="{{ route('sales-report.index') }}">
+                                        <span class="menu-bullet">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M4 19V5a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1z"/>
+                                            <path d="M8 15l2.5-3 2.5 2 3.5-5"/>
+                                            </svg>
+                                        </span>
+                                        <span class="menu-title">{{ __('Sales Report') }}</span>
+                                    </a>
+                                </div>
+                                @endhasanyrole
                             </div>
                         </div>
 

@@ -17,6 +17,7 @@ use App\Http\Controllers\Product\SubCategoryController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReceiptController;
 use App\Http\Controllers\Sale\SaleController;
+use App\Http\Controllers\SalesReportController;
 use App\Http\Controllers\SmsLogController;
 use App\Http\Controllers\UserManagementController;
 use Illuminate\Support\Facades\Route;
@@ -168,6 +169,14 @@ Route::middleware('auth')->group(function () {
     });
 
     Route::get('sales/{id}', [SaleController::class, 'Show'])->name('sales.show');
+
+    // ── Sales Report — filterable, exportable, printable ──
+    Route::middleware('role:super-admin|admin|manager')->group(function () {
+        Route::get('sales-report', [SalesReportController::class, 'Index'])->name('sales-report.index');
+        Route::get('sales-report/datatable', [SalesReportController::class, 'Datatable'])->name('sales-report.datatable');
+        Route::get('sales-report/export', [SalesReportController::class, 'Export'])->name('sales-report.export');
+        Route::get('sales-report/print', [SalesReportController::class, 'Print'])->name('sales-report.print');
+    });
 
     // ── Installment Plans — list + schedule/payment collection page ──
     Route::get('installments', [InstallmentController::class, 'Index'])->name('installments.index');
