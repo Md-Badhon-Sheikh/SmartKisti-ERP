@@ -1,5 +1,5 @@
 <div class="report-header">
-    <h2>SmartKisti ERP</h2>
+    <h2>Installment ERP</h2>
     <div class="report-subtitle">{{ __('Sales Report') }}</div>
     <div class="report-meta">{{ __('Generated on') }}: {{ $generatedAt->format('d M Y, h:i A') }}</div>
 </div>

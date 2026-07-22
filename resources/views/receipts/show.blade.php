@@ -88,7 +88,7 @@
 <body>
     <div class="receipt-box">
         <div class="receipt-header">
-            <h2>SmartKisti ERP</h2>
+            <h2>Installment ERP</h2>
             <div class="text-muted">{{ __('Payment Receipt') }}</div>
             <div class="receipt-no">{{ $receipt->receipt_no }}</div>
         </div>

@@ -150,7 +150,7 @@ class InstallmentController extends Controller
         }
 
         $message = sprintf(
-            'প্রিয় %s, আপনার কিস্তি #%d এর ৳%s পরিশোধ সফলভাবে গ্রহণ করা হয়েছে। অবশিষ্ট বাকি: ৳%s। রিসিট: %s - SmartKisti ERP',
+            'প্রিয় %s, আপনার কিস্তি #%d এর ৳%s পরিশোধ সফলভাবে গ্রহণ করা হয়েছে। অবশিষ্ট বাকি: ৳%s। রিসিট: %s - Installment ERP',
             $payment->customer->name,
             $payment->installment_no,
             number_format($payment->amount, 2),

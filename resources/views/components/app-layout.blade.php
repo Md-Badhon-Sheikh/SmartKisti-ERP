@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>{{ $title ?? config('app.name', 'SmartKisti ERP') }}</title>
+    <title>{{ $title ?? config('app.name', 'Smart Installment ERP') }}</title>
 
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
@@ -31,7 +31,7 @@
              data-kt-drawer-toggle="#kt_aside_mobile_toggle">
             <div class="aside-logo flex-column-auto" id="kt_aside_logo">
                 <a href="{{ route('dashboard') }}">
-                    <span class="fs-3 fw-bolder text-gray-800">SmartKisti ERP</span>
+                    <span class="fs-3 fw-bolder text-gray-800">Installment ERP</span>
                 </a>
                 <div id="kt_aside_toggle" class="btn btn-icon w-auto px-0 btn-active-color-primary aside-toggle"
                      data-kt-toggle="true" data-kt-toggle-state="active" data-kt-toggle-target="body"
@@ -429,7 +429,7 @@
                     </div>
 
                     <div class="d-flex align-items-center flex-grow-1 flex-lg-grow-0">
-                        <a href="{{ route('dashboard') }}" class="d-lg-none fs-4 fw-bolder text-gray-800">SmartKisti ERP</a>
+                        <a href="{{ route('dashboard') }}" class="d-lg-none fs-4 fw-bolder text-gray-800">Installment ERP</a>
                     </div>
 
                     <div class="d-flex align-items-stretch flex-lg-grow-1">
@@ -500,7 +500,7 @@
                 <div class="container-fluid d-flex flex-column flex-md-row align-items-center justify-content-between">
                     <div class="text-dark order-2 order-md-1">
                         <span class="text-muted fw-bold me-1">{{ date('Y') }}©</span>
-                        <span class="text-gray-800">SmartKisti ERP</span>
+                        <span class="text-gray-800">Installment ERP</span>
                     </div>
                 </div>
             </div>

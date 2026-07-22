@@ -225,7 +225,7 @@ class SaleController extends Controller
         }
 
         $message = sprintf(
-            'প্রিয় %s, আপনার ইনভয়েস %s তৈরি হয়েছে। সর্বমোট: ৳%s, পরিশোধিত: ৳%s, বাকি: ৳%s। ধন্যবাদ - SmartKisti ERP',
+            'প্রিয় %s, আপনার ইনভয়েস %s তৈরি হয়েছে। সর্বমোট: ৳%s, পরিশোধিত: ৳%s, বাকি: ৳%s। ধন্যবাদ - Installment ERP',
             $sale->customer->name,
             $sale->invoice_no,
             number_format($sale->grand_total, 2),

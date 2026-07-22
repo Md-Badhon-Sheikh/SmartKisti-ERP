@@ -43,7 +43,7 @@ class SendPasswordResetOtp
 
         $this->sms->driver()->send(
             $mobile,
-            "SmartKisti ERP: আপনার পাসওয়ার্ড রিসেট কোড {$otp}। এটি ৫ মিনিটের জন্য বৈধ। কারো সাথে শেয়ার করবেন না।"
+            "Installment ERP: আপনার পাসওয়ার্ড রিসেট কোড {$otp}। এটি ৫ মিনিটের জন্য বৈধ। কারো সাথে শেয়ার করবেন না।"
         );
     }
 }
